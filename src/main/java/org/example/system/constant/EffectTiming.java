@@ -1,0 +1,73 @@
+package org.example.system.constant;
+
+import lombok.Getter;
+
+import java.util.List;
+
+@Getter
+public enum EffectTiming {
+    BeginGame("游戏开始时"),
+
+    BeginTurn("回合开始时"),
+    EndTurn("回合结束时"),
+    BeginTurnAtHand("在手牌上回合开始时"),
+    EndTurnAtHand("在手牌上回合结束时"),
+    EnemyBeginTurn("敌方回合开始时"),
+    EnemyEndTurn("敌方回合结束时"),
+    EnemyBeginTurnAtHand("在手牌上敌方回合开始时"),
+    EnemyEndTurnAtHand("在手牌上敌方回合结束时"),
+
+
+    InvocationBegin("瞬念召唤（回合开始时）"),
+    InvocationEnd("瞬念召唤（回合结束时）"),
+
+    // ————————— 以下是可以通过连锁触发的效果 —————————//
+
+    WhenAddHand("加入手牌时",List.class),
+    WhenAddedToHand("被加入手牌时"),
+    WhenDrawn("被抽到时"),
+    WhenAddDeck("我方洗入牌堆时",List.class),
+    WhenDraw("我方抽牌时",List.class),
+    WhenOverDraw("我方超抽时",Integer.class),
+    WhenEnemyDraw("敌方抽牌时",List.class),
+    WhenEnemyOverDraw("敌方超抽时",Integer.class),
+    WhenAbandoned("被弃牌时"),
+    WhenAbandon("弃牌时",List.class),
+    WhenSummon("我方召唤时",List.class),
+    WhenEnemySummon("敌方召唤时",List.class),
+    WhenDestroy("我方破坏时",List.class),
+    WhenEnemyDestroy("敌方破坏时",List.class),
+    WhenRecalled("被召还时",List.class),
+    WhenOthersRecall("其他卡牌召还时",List.class),
+    Entering("入场时"),
+    WhenAtArea("在场时"),
+    WhenNoLongerAtArea("不在场时"),
+    Leaving("离场时"),
+    WhenBackToHand("返回手牌时"),
+    DeathRattle("亡语"),
+    WhenCostGraveyard("发动死灵术时",Integer.class),
+    WhenCostPartyHot("发动派对狂欢时",Integer.class),
+    Transmigration("轮回时"),
+    // 特殊规则事件
+    WhenSwapChara("切换时"),
+
+    ;
+
+    private String name;
+    private Class paramClass = null;
+    private boolean secret = false;
+    private boolean enableWhenLeaveArea = false; //TODO
+
+    EffectTiming(String name) {
+        this.name = name;
+    }
+    EffectTiming(String name,Class paramClass) {
+        this.name = name;
+        this.paramClass = paramClass;
+    }
+    EffectTiming(String name,Class param,boolean secret) {
+        this.name = name;
+        this.paramClass = param;
+        this.secret = secret;
+    }
+}
