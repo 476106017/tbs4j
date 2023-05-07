@@ -1,6 +1,8 @@
-package org.example.system.constant;
+package org.example.constant;
 
 import lombok.Getter;
+import org.example.system.game.Damage;
+import org.example.system.turnobj.FollowCard;
 
 import java.util.List;
 
@@ -20,9 +22,28 @@ public enum EffectTiming {
 
     InvocationBegin("瞬念召唤（回合开始时）"),
     InvocationEnd("瞬念召唤（回合结束时）"),
+    WhenPlay("我方出牌时", FollowCard.class),
+    WhenEnemyPlay("敌方出牌时",FollowCard.class),
+    AfterPlay("我方出牌后",FollowCard.class),
+    AfterEnemyPlay("敌方出牌后",FollowCard.class),
+    Boost("增幅",FollowCard.class,true),
+
+    WhenOtherAttack("友方随从攻击时", Damage.class),// TODO
+
+    WhenAttack("攻击时",Damage.class),
+    WhenBattle("交战时",Damage.class),
+    WhenLeaderSkill("激励时"),
+    BeforeDamaged("受伤前",Damage.class),
 
     // ————————— 以下是可以通过连锁触发的效果 —————————//
 
+
+    AfterDamaged("受伤时",Damage.class),
+    AfterLeaderDamaged("主战者受伤后",Damage.class),
+    AfterEnemyLeaderDamaged("敌方主战者受伤后",Damage.class),
+    LeaderHealing("主战者回复时",Damage.class),
+    LeaderHealed("主战者回复后",Damage.class),
+    WhenCreateCard("生成卡牌时",FollowCard.class),
     WhenAddHand("加入手牌时",List.class),
     WhenAddedToHand("被加入手牌时"),
     WhenDrawn("被抽到时"),
@@ -44,10 +65,13 @@ public enum EffectTiming {
     WhenNoLongerAtArea("不在场时"),
     Leaving("离场时"),
     WhenBackToHand("返回手牌时"),
+    Exile("除外时",FollowCard.class),
     DeathRattle("亡语"),
     WhenCostGraveyard("发动死灵术时",Integer.class),
     WhenCostPartyHot("发动派对狂欢时",Integer.class),
     Transmigration("轮回时"),
+    WhenKill("击杀时",FollowCard.class),
+
     // 特殊规则事件
     WhenSwapChara("切换时"),
 
@@ -61,11 +85,11 @@ public enum EffectTiming {
     EffectTiming(String name) {
         this.name = name;
     }
-    EffectTiming(String name,Class paramClass) {
+    EffectTiming(String name, Class paramClass) {
         this.name = name;
         this.paramClass = paramClass;
     }
-    EffectTiming(String name,Class param,boolean secret) {
+    EffectTiming(String name, Class param, boolean secret) {
         this.name = name;
         this.paramClass = param;
         this.secret = secret;

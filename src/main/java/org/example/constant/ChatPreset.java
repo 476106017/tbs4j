@@ -1,4 +1,4 @@
-package org.example.system.constant;
+package org.example.constant;
 
 import lombok.Getter;
 

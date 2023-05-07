@@ -1,4 +1,4 @@
-package org.example.system.constant;
+package org.example.constant;
 
 public class CounterKey{
     public static final String DEFAULT = "默认";

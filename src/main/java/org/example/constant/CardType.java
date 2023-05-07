@@ -1,4 +1,4 @@
-package org.example.system.constant;
+package org.example.constant;
 
 public enum CardType {
     AMULET("护符"),

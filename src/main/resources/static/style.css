@@ -1,0 +1,327 @@
+.container {
+    width: 100%; /* 宽度可以根据需要进行调整 */
+    max-width: 1200px; /* 可选：设置最大宽度，以确保容器不会太宽 */
+    margin: 0 auto; /* 使容器居中对齐 */
+    padding: 20px; /* 可选：设置内边距以增加内容和容器之间的空白 */
+    border: 1px solid #ccc; /* 可选：添加边框样式 */
+    box-sizing: border-box; /* 将 padding 和 border 计算在内，避免盒模型的问题 */
+  }
+
+  .card {
+    position: relative;
+    width: 220px !important;
+    height: 356px !important;
+    margin: 20px;
+    border-radius: 5px;
+    border: 1px solid #4b4b4b;
+    box-shadow: 0 0 20px #4b4b4b;
+    background-color: #f7f7f7;
+    overflow: hidden;
+  }
+
+  .card .image {
+
+    position: absolute;
+    left: -5px;
+    width: 100%;
+    height: 50%;
+    object-fit: contain;
+    transition: transform 0.3s ease-in-out, height 0.3s ease-in-out;
+    overflow: hidden;
+  }
+
+	img .error  {
+    top: 30px;
+    left: 40px;
+    width: 10%;
+    height: 10%;
+	}
+
+  .card .type {
+    z-index: 2;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 32px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.618);
+    text-shadow: 0 0 3px #000;
+  }
+  .card .race {
+    z-index: 4;
+    position: absolute;
+    top: 30px;
+    right: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 0 3px #000;
+  }
+
+  .card .name {
+    z-index: 5;
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    text-shadow: -1px -1px 0 #0ff,
+                    1px 1px 0 #f00,
+                    0 0 3px #000;
+  }
+
+  .card .cost {
+    z-index: 5;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 40px;
+    height: 40px;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 1.7rem;
+    text-shadow: 0px 0px 4px #000000;
+    text-align: center;
+    border: 2px solid #f0fff0;
+    background: radial-gradient(#adff2f, #2f4f4f9f);
+    transition: color 0.3s ease-in-out;
+  }
+  .card:hover .cost {
+    animation: blink 1s infinite;
+
+  }
+
+@keyframes blink {
+    0% {
+      color: #f00;
+    }
+    50% {
+      color: #fcc;
+    }
+    100% {
+      color: #f00;
+    }
+  }
+
+  .card:hover .name {
+    z-index: 9;
+    animation: tiktok 1s infinite;
+    transform: scale(1.5);
+    margin-right: 10px;
+  }
+  .tiktok {
+    z-index: 9;
+    animation: tiktok 1s infinite;
+  }
+@keyframes tiktok {
+    0% {
+        text-shadow: -1px -1px 0 #0ff,
+                    1px 1px 0 #f00 ;
+    }
+    25% {
+        text-shadow: 1px -1px 0 #0ff,
+                    -1px 1px 0 #f00 ;
+    }
+    50% {
+        text-shadow: 1px 1px 0 #0ff,
+                    -1px -1px 0 #f00 ;
+    }
+    75% {
+        text-shadow: -1px 1px 0 #0ff,
+                    1px -1px 0 #f00 ;
+    }
+    100% {
+        text-shadow: -1px -1px 0 #0ff,
+                    1px 1px 0 #f00 ;
+    }
+  }
+
+  .card .countDown {
+    z-index: 5;
+    position: absolute;
+    bottom: 0px;
+    left: 80px;
+    width: 70px;
+    height: 30px;
+    font-size: 0.6rem;
+    color: #fff;
+    text-shadow: 0px 0px 3px #000080;
+    text-align: center;
+    border: 2px solid #ffffff;
+    background: linear-gradient(to bottom, #fffacd, #ffd700, #b8860b);
+    border: 1px solid #4b4b4b;
+    font-weight: bold;
+    line-height: 30px;
+  }
+
+
+  .card .attack {
+    z-index: 5;
+    position: absolute;
+    bottom: 5px;
+    left: 10px;
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+    color: #f0ffff;
+    text-shadow: 0px 0px 2px #000080;
+    text-align: center;
+    border-radius: 50%;
+    border: 2px solid #f0ffff;
+    background: radial-gradient(#0000cd, #333333);
+    font-weight: bold;
+    line-height: 30px;
+  }
+
+
+  .card .description {
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 90%;
+    height: 40%;
+    padding: 0 10px 0 10px;
+    margin: 0 10px 40px 10px;
+    box-sizing: border-box;
+    font-size: 16px;
+    font-weight: bold;
+    color: #8b4513;
+    border-radius: 5%;
+    background: linear-gradient(to bottom, #faebd7, #bdb76b,#fdf5e6);
+    transition: width 0.3s ease-in-out,height 0.3s ease-in-out, margin-bottom 0.3s ease-in-out;
+    z-index: 1;
+    white-space: pre-line;
+    overflow: hidden;
+    }
+
+    .card .description:hover {
+      z-index: 9;
+      background: linear-gradient(to bottom, #ffd700, #ff0,#eee8aa);
+      margin: 0 0 30px 0;
+      width: 100%;
+      height: 80%;
+      font-size: 14px;
+    }
+    .card .description:hover .job {
+      display: block;
+    }
+
+    .card .description p {
+      margin: 5px;
+      text-align: left;
+    }
+
+    .job {
+      z-index: 5;
+      display: none;
+      position: absolute;
+      bottom: 0px;
+      left: 80px;
+      width: 70px;
+      height: 30px;
+      font-size: 0.6rem;
+      color: #cd853f;
+      text-align: center;
+      font-weight: bold;
+      line-height: 30px;
+    }
+
+    .keyword {
+      color: #8b0000;
+      text-shadow: 0px 0px 1px #500000;
+    }
+
+
+    .health-bar {
+        z-index: 5;
+        width: 120px;
+        height: 20px;
+        background-color: #333333;
+        border-radius: 10px;
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        overflow: hidden;
+      }
+
+      .health-bar-inner {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to bottom, #f00, #8b0000, #dc143c);
+        transition: width 0.3s ease-in-out;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      .health-bar-text {
+        color: white;
+        text-align: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        text-shadow: 0px 0px 3px #600;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 12px;
+      }
+
+      .health-bar:hover .health-bar-inner {
+        width: 100%;
+        background-color: #c0392b;
+      }
+
+      .health-bar:hover .health-bar-text {
+        font-size: 14px;
+        transform: scale(1.2);
+      }
+
+
+.footer {
+    z-index: 999;
+    text-align: right;
+    bottom: 10px;
+    right: 10px;
+    background-color: #fff;
+}
+
+
+.mny-alert-position{
+  position:absolute;
+  float: left;
+  top:5%;
+  left:50%;
+  width: 62%;
+  /*margin-left: -81px;*/
+  z-index: 999999;
+  opacity: 0.618;
+}
+.upgrade{
+  color: #3F3 !important;
+}
+
+.selected{
+  border: 1px solid #f00;
+  box-shadow: 0 0 20px #f00;
+  text-shadow: 0 0 3px #f00;
+}
+
+.selected .name{
+  color: #000;
+}
+.selected .cost{
+  color: #000;
+}
+.selected .description{
+  color: #000;
+}
+
+
+#swap-card .card{
+  margin: 5px;
+}
