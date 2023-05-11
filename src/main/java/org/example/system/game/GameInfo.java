@@ -227,8 +227,19 @@ public class GameInfo implements Serializable {
             rope = roomSchedule.get(getRoom()).schedule(this::endTurnOfTimeout, 300, TimeUnit.SECONDS);
             msg("倒计时300秒！");
         }
+
+        getTurnObject().removeKeyword("混乱");
+        getTurnObject().removeKeyword("离神");
+
+        if(getTurnObject().hasKeyword("混乱")){
+            if(Math.random()<0.3333){
+                msg(turnObject.getNameWithOwner()+"陷入混乱！");
+                damageEffect(turnObject,turnObject,40);
+                endTurnOfCommand();
+                return;
+            }
+        }
         if(getTurnObject().hasKeyword("离神")){
-            getTurnObject().removeKeyword("离神");
             msg(turnObject.getNameWithOwner()+"跳过回合！");
             endTurnOfCommand();
             return;

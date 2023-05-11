@@ -61,6 +61,12 @@ public abstract class Skill extends GameObj {
         // endregion 计算使用后
         info.startEffect();
 
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         info.endTurnOfCommand();
 
     }

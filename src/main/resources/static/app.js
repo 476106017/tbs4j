@@ -12,7 +12,7 @@ var turnObjHtml = function(turnObj,first){
 var cardHtml = function(card){
     return `
         <div class="card col-sm-6 col-md-4 col-lg-2 id-${card.id} ${card.TYPE} ${card.canAttack?'canAttack':''} ${card.canDash?'canDash':''}">
-            <img src="${card.name}.png" alt="" class="image" onerror="this.src='error.webp'">
+            <img src="https://c-1316363893.cos.ap-nanjing.myqcloud.com/${encodeURIComponent(card.name)}.png" alt="" class="image" onerror="this.src='error.webp'">
             <div class="name">${card.name}</div>
             ${card.race.length>0?'<p class="race">'+card.race.join(' ')+'</p>':""}
             <div class="${card.speed>0?'cost':''}">${card.speed}</div>
@@ -20,10 +20,7 @@ var cardHtml = function(card){
                 <p>${card.keywords?'<b class="keyword">'+distinctArr(card.keywords).join(' ')+'</b>\n':""}${card.mark}</p>
                 <div class="job">${card.job}</div>
             </div>
-            <div ${card.TYPE!="AMULET"?"hidden":""}>
-                <div class="countDown">倒数：${card.countDown>0?card.countDown:"∞"}</div>
-            </div>
-            <div ${card.TYPE!="FOLLOW"?"hidden":""}>
+            <div>
                 <div class="attack">${card.atk}</div>
                 <div class="health-bar">
                     <div class="health-bar-inner" style="width: ${card.hp/card.maxHp*100}%;"></div>
@@ -97,10 +94,10 @@ var drawBoard = function(){
             $(".id-"+card.id).addClass('canDash');
         }
     });
-    
+
     $('#my-hand .card').unbind().click(function(){
         let select = $(this).index()+1;
-        
+
         drawBoard();// 先还原棋盘
         setTimeout("websocket.send('play::"+select+"')",500);
     })
@@ -108,7 +105,7 @@ var drawBoard = function(){
     boardInfo.turn.forEach((obj,index) => {
         $('#my-info').append(turnObjHtml(obj,index==0));
     })
-    
+
 }
 
 
@@ -151,7 +148,7 @@ function  mnyAlert(type,msg,time=2000){
 function endTurn(){
     $(".end-button").html("对方<br/>回合");
     $(".end-button").css("background","radial-gradient(red, #2f4f4f9f)");
-    
+
     setTimeout("websocket.send('end')",500);
 }
 
@@ -181,9 +178,9 @@ var targets;// 可指定的卡牌
 if ($.trim(userName)) {
     if(window.location.host.indexOf("card4j") <= 0)
         // 本地运行
-        websocket = new WebSocket("ws://localhost:18081/api/"+userName);
+        websocket = new WebSocket("ws://localhost:18082/api/"+userName);
     else
-        websocket = new WebSocket("ws://www.card4j.top:18081/api/"+userName);
+        websocket = new WebSocket("ws://www.card4j.top:18082/api/"+userName);
 
     $("username").html(userName);
     console.log("征集有趣的自定义卡牌、主战者、玩法、卡面。联系方式：（Bilibili）漆黑Ganker");
@@ -242,7 +239,7 @@ if ($.trim(userName)) {
                 $('#my-hand .card').unbind();
                 targets = obj;// 加载待选择项
                 $('#my-battlefield .card').unbind();// 禁止攻击事件
-                
+
                 $('#my-info-detail .skill').addClass("selected");
                 $('#my-info-detail .skill').unbind().click(()=>{
                     initBoard();// 还原棋盘
@@ -286,5 +283,5 @@ if ($.trim(userName)) {
         // alert("已断开和服务器的连接，请刷新页面！");
     };
 
-    
+
 }

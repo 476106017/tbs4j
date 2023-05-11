@@ -2,6 +2,8 @@ package org.example.system.turnobj.pokemon;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.example.system.game.Damage;
+import org.example.system.game.DamageMulti;
 import org.example.system.game.Play;
 import org.example.system.turnobj.FollowCard;
 import org.example.system.turnobj.Skill;
@@ -11,13 +13,13 @@ import java.util.List;
 
 @Setter
 @Getter
-public class Hitokage extends FollowCard {
-    private String name = "小火龙";
-    private int speed = 65;
-    private int atk = 52;
-    private int hp = 390;
+public class Zenigame extends FollowCard {
+    private String name = "杰尼龟";
+    private int speed = 43;
+    private int atk = 48;
+    private int hp = 440;
     private String job = "宝可梦";
-    private List<String> race = Lists.ofStr("火");
+    private List<String> race = Lists.ofStr("水");
     private String mark = """
     """;
     private String subMark = "";
@@ -25,30 +27,33 @@ public class Hitokage extends FollowCard {
     @Override
     public void init() {
         super.init();
-        addSkill(Hinoko.class);
+        addSkill(Mizudeppou.class);
         addSkill(Honoonokiba.class);
     }
 
     @Getter
     @Setter
-    public static class Hinoko extends Skill {
+    public static class Mizudeppou extends Skill {
 
-        private String name = "火花";
+        private String name = "水枪";
         private String job = "宝可梦";
-        private List<String> race = Lists.ofStr("火");
+        private List<String> race = Lists.ofStr("水");
         private String mark = """
-        造成40点伤害, 有30%几率对手陷入3回合【灼伤】状态
+        攻击目标造成伤害，10%概率暴击。
         """;
         private String subMark = "";
 
-        public Hinoko() {
+        public Mizudeppou() {
             setPlay(new Play(
                 () -> enemyPlayer().getAreaGameObj(), true,
                 obj->{
                     final FollowCard enemyFollow = (FollowCard) obj;
-                    info.damageEffect(getBaseFollow(), enemyFollow,40);
-                    if(Math.random()<0.3){
-                        enemyFollow.addKeywordN("灼伤",3);
+                    if(Math.random()<0.1){
+                        final Damage damage = new Damage(getBaseFollow(), enemyFollow);
+                        damage.multi(2f);
+                        new DamageMulti(getInfo(),List.of(damage, new Damage(enemyFollow,getBaseFollow()))).apply();
+                    }else {
+                        getBaseFollow().attack(enemyFollow);
                     }
                 }));
         }
@@ -57,28 +62,24 @@ public class Hitokage extends FollowCard {
 
     @Getter
     @Setter
-    public static class Honoonokiba extends Skill {
+    public static class Mizunohodou extends Skill {
 
-        private String name = "火焰牙";
+        private String name = "水之波动";
         private String job = "宝可梦";
-        private List<String> race = Lists.ofStr("火");
+        private List<String> race = Lists.ofStr("水");
         private String mark = """
-        攻击目标, 有10%的几率使目标陷入3回合【灼伤】状态。
-        如果目标回合倒计时多于50，则有10%的几率使目标陷入1回合【离神】状态。
+        攻击目标, 有20%的几率使目标陷入1回合【混乱】状态。
         """;
         private String subMark = "";
 
-        public Honoonokiba() {
+        public Mizunohodou() {
             setPlay(new Play(
                 () -> enemyPlayer().getAreaGameObj(), true,
                 obj->{
                     final FollowCard enemyFollow = (FollowCard) obj;
                     getBaseFollow().attack(enemyFollow);
-                    if(Math.random()<0.1){
-                        enemyFollow.addKeywordN("灼伤",3);
-                    }
-                    if(enemyFollow.getWaitTimeShow()>=50 && Math.random()<0.1){
-                        enemyFollow.addKeyword("离神");
+                    if(Math.random()<0.2){
+                        enemyFollow.addKeywordN("混乱",1);
                     }
                 }));
         }

@@ -69,6 +69,11 @@ public class Damage{
         return false;
     }
 
+    public void multi(float f){
+        final int damage2 = (int) (getDamage() * f);
+        setDamage(damage2);
+    }
+
     public void reduce(){
         Integer strength = 0;
         try{
