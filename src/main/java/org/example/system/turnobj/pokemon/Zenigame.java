@@ -28,7 +28,7 @@ public class Zenigame extends FollowCard {
     public void init() {
         super.init();
         addSkill(Mizudeppou.class);
-        addSkill(Honoonokiba.class);
+        addSkill(Mizunohodou.class);
     }
 
     @Getter
