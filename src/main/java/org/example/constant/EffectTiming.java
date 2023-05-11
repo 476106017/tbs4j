@@ -2,7 +2,7 @@ package org.example.constant;
 
 import lombok.Getter;
 import org.example.system.game.Damage;
-import org.example.system.turnobj.FollowCard;
+import org.example.turnobj.FollowCard;
 
 import java.util.List;
 

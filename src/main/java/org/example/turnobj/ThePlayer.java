@@ -1,4 +1,4 @@
-package org.example.system.turnobj;
+package org.example.turnobj;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,7 +6,6 @@ import org.example.system.game.Leader;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import static org.example.constant.CounterKey.EP_NUM;
 

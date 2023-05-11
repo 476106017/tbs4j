@@ -20,7 +20,7 @@ var cardHtml = function(card){
                 <p>${card.keywords?'<b class="keyword">'+distinctArr(card.keywords).join(' ')+'</b>\n':""}${card.mark}</p>
                 <div class="job">${card.job}</div>
             </div>
-            <div>
+            <div ${card.TYPE!="FOLLOW"?"hidden":""}>
                 <div class="attack">${card.atk}</div>
                 <div class="health-bar">
                     <div class="health-bar-inner" style="width: ${card.hp/card.maxHp*100}%;"></div>
@@ -210,6 +210,23 @@ if ($.trim(userName)) {
                 break;
             case "alert":
                 alert(obj);
+                break;
+            case "myDeck":
+                $('#card-gridview').html("");
+                myDeck = "";
+                obj.deck.forEach(card => {
+                    $('#card-gridview').append(cardHtml(card));
+                    myDeck += card.name;
+                    myDeck += "#";
+                });
+                // websocket.send('joinRoom');// test
+                break;
+            case "presetDeck":
+                $('#deck-preset').html("");
+                obj.forEach(deck => {
+                    $('#deck-preset').append('<button type="button" class="btn btn-outline-dark" data-dismiss="modal" onclick="websocket.send(\'usedeck::'+deck.name+'\');">'+deck.name+'</button>');
+                });
+                $('#deck-preset-modal').modal('show');
                 break;
             case "waitRoom":
                 $('#roomCode').html(obj);

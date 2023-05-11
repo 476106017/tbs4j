@@ -7,17 +7,15 @@ import org.example.system.game.GameInfo;
 import org.example.system.game.Leader;
 import org.example.system.game.Play;
 import org.example.system.game.PlayerInfo;
-import org.example.system.turnobj.FollowCard;
-import org.example.system.turnobj.GameObj;
-import org.example.system.turnobj.Skill;
-import org.example.system.util.Lists;
+import org.example.turnobj.FollowCard;
+import org.example.turnobj.GameObj;
+import org.example.turnobj.Skill;
 import org.example.system.util.Maps;
 import org.example.system.util.Msg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.concurrent.Executors;
 
 import static org.example.system.Database.*;
 

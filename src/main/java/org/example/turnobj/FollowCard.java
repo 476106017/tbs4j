@@ -1,4 +1,4 @@
-package org.example.system.turnobj;
+package org.example.turnobj;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -116,11 +116,23 @@ public abstract class FollowCard extends GameObj {
     public void addKeyword(String k){
         info.msg(getNameWithOwner()+"获得了【"+k+"】");
         getKeywords().add(k);
+        try {
+            Thread.sleep(500);
+            info.pushInfo();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
     public void addKeywordN(String k,int n){
         info.msg(getNameWithOwner()+"获得了"+n+"层【"+k+"】");
         for (int i = 0; i < n; i++) {
             getKeywords().add(k);
+        }
+        try {
+            Thread.sleep(500);
+            info.pushInfo();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
     public void addKeywords(List<String> ks){
@@ -159,6 +171,12 @@ public abstract class FollowCard extends GameObj {
                 getKeywords().remove(keys.get(i));
             }
             info.msg(getNameWithOwner()+"失去了"+min+"层【"+ k +"】");
+            try {
+                Thread.sleep(500);
+                info.pushInfo();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
     public void removeKeywordAll(String k){
@@ -210,6 +228,16 @@ public abstract class FollowCard extends GameObj {
         area.remove(this);
         useEffects(EffectTiming.WhenNoLongerAtArea);
 
+        // 从回合对象中删除该随从
+        getInfo().getTurn().getObjects().remove(this);
+
+        try {
+            Thread.sleep(500);
+            info.pushInfo();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         if(hasKeyword("游魂")){
             info.msg("墓地拒绝了【游魂】，无法发动死亡相关效果！");
             return;
@@ -225,6 +253,12 @@ public abstract class FollowCard extends GameObj {
             removeKeyword("复生");
             setHp(1);
             ownerPlayer().summon(this);
+            try {
+                Thread.sleep(500);
+                info.pushInfo();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             return;
         }
         ownerPlayer().addGraveyard(this);
@@ -270,6 +304,12 @@ public abstract class FollowCard extends GameObj {
         setAtk(Math.max(0,finalAtk));
         setHp(finalHp);
         setMaxHp(finalMaxHp);
+        try {
+            Thread.sleep(500);
+            info.pushInfo();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         if(getHp()<=0){
             death();
         }

@@ -3,7 +3,7 @@ package org.example.system.game;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.system.Database;
-import org.example.system.turnobj.FollowCard;
+import org.example.turnobj.FollowCard;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;

@@ -1,12 +1,10 @@
 package org.example.system.game;
 
-import org.example.system.turnobj.FollowCard;
-import org.example.system.turnobj.GameObj;
+import org.example.turnobj.GameObj;
 import org.example.system.util.FunctionN;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 

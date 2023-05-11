@@ -3,9 +3,7 @@ package org.example.system.util;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.system.game.PlayerInfo;
-import org.example.system.turnobj.FollowCard;
-import org.example.system.turnobj.TurnObject;
-import org.example.system.turnobj.pokemon.Pikachu;
+import org.example.turnobj.FollowCard;
 
 import java.util.*;
 
@@ -18,6 +16,7 @@ public class TurnWrapper {
 
     private List<FollowCard> objects = new ArrayList<>();
     public void addObject(List<FollowCard> objects){
+        objects.forEach(followCard -> followCard.setPassage(0));
         getObjects().addAll(objects);
     }
     public void addObject(FollowCard object){

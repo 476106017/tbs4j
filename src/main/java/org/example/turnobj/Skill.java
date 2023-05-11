@@ -1,18 +1,11 @@
-package org.example.system.turnobj;
+package org.example.turnobj;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.example.constant.EffectTiming;
-import org.example.system.game.GameInfo;
 import org.example.system.game.Play;
-import org.example.system.util.Lists;
-import org.example.system.util.Msg;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.example.constant.CounterKey.*;
 
 @Getter
 @Setter
@@ -48,6 +41,11 @@ public abstract class Skill extends GameObj {
         }
         // endregion 发动卡牌效果
 
+        if(getInfo().isReset()){
+            getInfo().setReset(false);
+            getInfo().pushInfo();
+            return;// 重置对局后前一对局的结束回合忽略掉
+        }
 
         ownerPlayer().count("连续行动次数-"+getName());
 
@@ -63,7 +61,7 @@ public abstract class Skill extends GameObj {
 
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

@@ -1,15 +1,14 @@
-package org.example.system.turnobj.pokemon;
+package org.example.turnobj.pokemon;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.example.constant.EffectTiming;
 import org.example.system.game.Effect;
 import org.example.system.game.Play;
-import org.example.system.turnobj.FollowCard;
-import org.example.system.turnobj.Skill;
+import org.example.turnobj.FollowCard;
+import org.example.turnobj.Skill;
 import org.example.system.util.Lists;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Setter

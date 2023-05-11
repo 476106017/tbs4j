@@ -3,7 +3,7 @@ package org.example.system.game;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.constant.EffectTiming;
-import org.example.system.turnobj.FollowCard;
+import org.example.turnobj.FollowCard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +36,13 @@ public class DamageMulti {
             to.setHp(to.getHp() - damage.getDamage());
             info.msg(to.getNameWithOwner()+"受到了来自"+damage.getFrom().getNameWithOwner()+"的"+damage.getDamage()+"点伤害！" +
                 "（剩余"+ to.getHp()+"点生命值）");
+
+            try {
+                Thread.sleep(500);
+                info.pushInfo();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         });
         // endregion 扣血
         // region 受伤
@@ -46,7 +53,7 @@ public class DamageMulti {
                     damage.getTo().addKeyword("无法回复");
                 }
                 if(damage.getFrom() instanceof FollowCard follow && follow.hasKeyword("吸血")){
-                    info.msg(damage.getFrom().getNameWithOwner() + "发动自愈效果！");
+                    info.msg(damage.getFrom().getNameWithOwner() + "发动吸血效果！");
                     follow.heal(damage.getDamage());
                 }
                 damage.getTo().setIncommingDamage(damage);
@@ -60,7 +67,7 @@ public class DamageMulti {
             if(damage.getTo().atArea()){
                 if(damage.getFrom() instanceof FollowCard follow && follow.hasKeyword("剧毒")) {
                     // 剧毒伤害击杀
-                    info.msg(damage.getFrom() + "发动剧毒效果！");
+                    info.msg(damage.getFrom().getName() + "发动剧毒效果！");
                     damage.getTo().setDestroyedBy(follow);
                 }else if(damage.getTo().getHp()<=0){
                     // 终结伤害击杀

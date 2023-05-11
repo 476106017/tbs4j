@@ -156,6 +156,7 @@
 }
 
 .hand {
+  height: 60%;
   background-color: green;
   padding-left: 80px;
 }
@@ -166,7 +167,7 @@
 .hand .card:hover{
   z-index: 999;
   transform: scale(1) ;
-  margin-top: -190px !important;
+  margin-top: -195px !important;
 }
 
 .hero-power {

@@ -5,9 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.constant.EffectTiming;
 import org.example.system.effectobj.Fire;
-import org.example.system.turnobj.FollowCard;
-import org.example.system.turnobj.GameObj;
-import org.example.system.turnobj.Skill;
+import org.example.turnobj.FollowCard;
+import org.example.turnobj.GameObj;
+import org.example.turnobj.Skill;
 import org.example.system.util.Maps;
 import org.example.system.util.Msg;
 import org.example.system.util.TurnWrapper;
@@ -28,6 +28,7 @@ public class GameInfo implements Serializable {
 
     boolean inSettle = false;
     int chainDeep = 3;
+    boolean isReset = false;
     TurnWrapper turn;
     FollowCard turnObject;
     int turnPlayer;
@@ -58,9 +59,15 @@ public class GameInfo implements Serializable {
 
     public void resetGame(){
         msg("游戏重启！");
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         roomSchedule.get(getRoom()).shutdown();
         roomSchedule.remove(getRoom());
         rope.cancel(true);
+        this.isReset = true;
         this.turn = new TurnWrapper();
         this.turnPlayer = 0;
         Session thisSession = thisPlayer().session;

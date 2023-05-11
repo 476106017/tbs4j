@@ -4,6 +4,7 @@ import jakarta.websocket.*;
 import jakarta.websocket.server.ServerEndpoint;
 import org.apache.logging.log4j.util.Strings;
 import org.example.endpoint.handler.ChatHandler;
+import org.example.endpoint.handler.DeckEditHandler;
 import org.example.endpoint.handler.GameHandler;
 import org.example.endpoint.handler.MatchHandler;
 import org.example.system.GsonConfig;
@@ -12,22 +13,17 @@ import org.example.system.WebSocketConfigurator;
 import org.example.system.game.GameInfo;
 import org.example.system.game.PlayerDeck;
 import org.example.system.game.PlayerInfo;
-import org.example.system.turnobj.ThePlayer;
-import org.example.system.turnobj.pokemon.Hitokage;
-import org.example.system.turnobj.pokemon.Pikachu;
+import org.example.turnobj.ThePlayer;
+import org.example.turnobj.pokemon.Fusigidane;
+import org.example.turnobj.pokemon.Hitokage;
+import org.example.turnobj.pokemon.Pikachu;
+import org.example.turnobj.pokemon.Zenigame;
 import org.example.system.util.Msg;
-import org.reflections.Reflections;
-import org.reflections.util.ConfigurationBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
 
 import static org.example.system.Database.*;
 
@@ -40,6 +36,7 @@ public class ApiServerEndpoint {
     @Autowired ChatHandler chatHandler;
     @Autowired GameHandler gameHandler;
     @Autowired MatchHandler matchHandler;
+    @Autowired DeckEditHandler deckEditHandler;
 
     @OnOpen
     public void onOpen(Session session) throws IOException {
@@ -58,6 +55,8 @@ public class ApiServerEndpoint {
 
         playerDeck.getActiveDeck().add(Pikachu.class);
         playerDeck.getActiveDeck().add(Hitokage.class);
+        playerDeck.getActiveDeck().add(Fusigidane.class);
+        playerDeck.getActiveDeck().add(Zenigame.class);
         playerDeck.setLeaderClass(ThePlayer.class);
         userDecks.put(session, playerDeck);
         // endregion
@@ -108,6 +107,10 @@ public class ApiServerEndpoint {
             switch (split[0]){
                 case "joinRoom" -> matchHandler.joinRoom(session);
                 case "leave" -> matchHandler.leave(session);
+
+                case "deck" -> deckEditHandler.deck(session);
+                case "usedeck" -> deckEditHandler.usedeck(session, param);
+                case "setdeck" -> deckEditHandler.setdeck(session, param);
 
                 case "chat" -> chatHandler.chat(session, param);
                 case "play" -> gameHandler.play(session, param);

@@ -1,4 +1,4 @@
-package org.example.system.turnobj;
+package org.example.turnobj;
 
 import lombok.Getter;
 import lombok.Setter;
