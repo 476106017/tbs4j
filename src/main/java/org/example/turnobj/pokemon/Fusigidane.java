@@ -16,9 +16,13 @@ import java.util.List;
 @Getter
 public class Fusigidane extends FollowCard {
     private String name = "妙蛙种子";
+    private String color = "#87ff16";
     private int speed = 45;
     private int atk = 49;
     private int hp = 450;
+    private int armor = 20;
+    private int magicResist = 30;
+    private int block = 50;
     private String job = "宝可梦";
     private List<String> race = Lists.ofStr("草","毒");
     private String mark = """
@@ -38,6 +42,7 @@ public class Fusigidane extends FollowCard {
     public static class Tsurunomuti extends Skill {
 
         private String name = "藤鞭";
+        private String color = "#87ff16";
         private String job = "宝可梦";
         private List<String> race = Lists.ofStr("草");
         private String mark = """
@@ -61,6 +66,7 @@ public class Fusigidane extends FollowCard {
     public static class Happakattaa extends Skill {
 
         private String name = "飞叶快刀";
+        private String color = "#87ff16";
         private String job = "宝可梦";
         private List<String> race = Lists.ofStr("草");
         private String mark = """
@@ -91,6 +97,7 @@ public class Fusigidane extends FollowCard {
     public static class Sooraabiimu extends Skill {
 
         private String name = "日光束";
+        private String color = "#87ff16";
         private String job = "宝可梦";
         private List<String> race = Lists.ofStr("草");
         private String mark = """

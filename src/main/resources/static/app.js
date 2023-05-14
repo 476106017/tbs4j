@@ -11,20 +11,21 @@ var turnObjHtml = function(turnObj,first){
 }
 var cardHtml = function(card){
     return `
-        <div class="card col-sm-6 col-md-4 col-lg-2 id-${card.id} ${card.TYPE} ${card.canAttack?'canAttack':''} ${card.canDash?'canDash':''}">
+        <div class="card col-sm-6 col-md-4 col-lg-2 id-${card.id} ${card.TYPE} ${card.canAttack?'canAttack':''} ${card.canDash?'canDash':''}"
+            style="background-color: ${card.color}">
             <img src="https://c-1316363893.cos.ap-nanjing.myqcloud.com/${encodeURIComponent(card.name)}.png" alt="" class="image" onerror="this.src='error.webp'">
             <div class="name">${card.name}</div>
             ${card.race.length>0?'<p class="race">'+card.race.join(' ')+'</p>':""}
-            <div class="${card.speed>0?'cost':''}">${card.speed}</div>
             <div class="description" title="${card.mark}">
-                <p>${card.keywords?'<b class="keyword">'+distinctArr(card.keywords).join(' ')+'</b>\n':""}${card.mark}</p>
+                <p>${card.keywords?'<b class="keyword">'+distinctArr(card.keywords).join(' ')+'</b>\n':""}
+                    ${card.TYPE=="FOLLOW"?'速度：'+card.speed+'&nbsp;&nbsp;&nbsp;&nbsp; 攻击：'+card.atk + '\n护甲：'+ card.armor + '&nbsp;&nbsp;&nbsp;&nbsp; 魔抗：'+card.magicResist:card.mark}
+                </p>
                 <div class="job">${card.job}</div>
             </div>
             <div ${card.TYPE!="FOLLOW"?"hidden":""}>
-                <div class="attack">${card.atk}</div>
                 <div class="health-bar">
+                    <div class="health-bar-block" style="width: ${card.block/card.maxHp*100}%;"></div>
                     <div class="health-bar-inner" style="width: ${card.hp/card.maxHp*100}%;"></div>
-
                     <div class="health-bar-text">${card.hp}/${card.maxHp}</div>
                 </div>
             </div>

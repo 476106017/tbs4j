@@ -17,8 +17,12 @@ import static org.example.constant.CounterKey.DEFAULT;
 public abstract class FollowCard extends GameObj {
 
     public final CardType TYPE = CardType.FOLLOW;
+    private transient String color = "#000";
     private transient int atk = 0;
     private transient int hp = 0;
+    private transient int armor = 0;
+    private transient int magicResist = 0;
+    private transient int block = 0;
     private int maxHp = 0;
     private List<Skill> skills = new ArrayList<>();
     public <T extends Skill> void addSkill(Class<T> skill){
@@ -313,6 +317,19 @@ public abstract class FollowCard extends GameObj {
         if(getHp()<=0){
             death();
         }
+    }
+
+    public void addBlock(int n){
+        setBlock(Math.max(0,getBlock() + n));
+    }
+    public void addAtk(int n){
+        setAtk(Math.max(0,getAtk() + n));
+    }
+    public void addArmor(int n){
+        setArmor(getArmor() + n);
+    }
+    public void addMagicResist(int n){
+        setMagicResist(getMagicResist() + n);
     }
 
     @Override

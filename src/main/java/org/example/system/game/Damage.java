@@ -89,24 +89,19 @@ public class Damage{
                 to.getInfo().msg(to.getNameWithOwner() + "免疫了效果伤害！");
             } else if(!to.hasKeyword("穿透")) {
                 // 没有穿透效果，计算减免
-                int reduce = 0;
-                reduce += to.countKeyword("伤害减免");
+                float reduce = 0;
                 if (isFromAtk())
-                    reduce += to.countKeyword("护甲");
+                    reduce = (float)to.getArmor()/(to.getArmor()+100);
                 else
-                    reduce += to.countKeyword("魔抗");
+                    reduce = (float)to.getMagicResist()/(to.getMagicResist()+100);
 
-                if (reduce > 0) {
-                    int finalReduce = Math.min(getDamage(), reduce);
-                    setDamage(getDamage() - finalReduce);
-                    to.getInfo().msg(to.getNameWithOwner() + "通过抗性减少了" + finalReduce + "点伤害");
-                }
+                setDamage((int)(getDamage() * (1-reduce)));
 
-                int parry = to.countKeyword(BLOCK);
+                int parry = to.getBlock();
                 if(getDamage()>0 && parry>0){
                     int parryReduce = Math.min(getDamage(), parry);
                     setDamage(getDamage() - parryReduce);
-                    to.removeKeyword(BLOCK,parryReduce);
+                    to.setBlock(parry - parryReduce);
                     to.getInfo().msg(to.getNameWithOwner() + "格挡了" + parryReduce + "点伤害（还剩"+to.countKeyword("格挡")+"点格挡）");
                 }
             }

@@ -15,13 +15,17 @@ import java.util.List;
 @Getter
 public class Pikachu extends FollowCard {
     private String name = "皮卡丘";
+    private String color = "#fff816";
     private int speed = 90;
     private int atk = 55;
     private int hp = 350;
+    private int armor = -10;
+    private int magicResist = 20;
+    private int block = 0;
     private String job = "宝可梦";
     private List<String> race = Lists.ofStr("电");
     private String mark = """
-    每回合永久增加1点速度
+    每回合速度+1
     """;
     private String subMark = "";
 
@@ -41,6 +45,7 @@ public class Pikachu extends FollowCard {
     public static class JuumannBoruto extends Skill {
 
         private String name = "十万伏特";
+        private String color = "#fff816";
         private String job = "宝可梦";
         private List<String> race = Lists.ofStr("电");
         private String mark = """
@@ -69,6 +74,7 @@ public class Pikachu extends FollowCard {
     public static class Denngekiha extends Skill {
 
         private String name = "电击";
+        private String color = "#fff816";
         private String job = "宝可梦";
         private List<String> race = Lists.ofStr("电");
         private String mark = """
