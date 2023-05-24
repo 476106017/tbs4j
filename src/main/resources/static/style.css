@@ -175,7 +175,7 @@
 
 
   .card .description {
-    display: flex;
+    display: inline-grid;
     position: absolute;
     bottom: 0;
     left: 0;
@@ -193,6 +193,10 @@
     z-index: 1;
     white-space: pre-line;
     overflow: auto;
+    }
+
+    .card .description p {
+      margin-bottom: 0;
     }
 
     .card .description:hover .job {

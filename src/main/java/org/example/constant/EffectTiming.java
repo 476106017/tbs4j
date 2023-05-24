@@ -3,6 +3,7 @@ package org.example.constant;
 import lombok.Getter;
 import org.example.system.game.Damage;
 import org.example.turnobj.FollowCard;
+import org.example.turnobj.Skill;
 
 import java.util.List;
 
@@ -22,10 +23,10 @@ public enum EffectTiming {
 
     InvocationBegin("瞬念召唤（回合开始时）"),
     InvocationEnd("瞬念召唤（回合结束时）"),
-    WhenPlay("我方出牌时", FollowCard.class),
-    WhenEnemyPlay("敌方出牌时",FollowCard.class),
-    AfterPlay("我方出牌后",FollowCard.class),
-    AfterEnemyPlay("敌方出牌后",FollowCard.class),
+    WhenPlay("我方出牌时", Skill.WithTarget.class),
+    WhenEnemyPlay("敌方出牌时",Skill.WithTarget.class),
+    AfterPlay("我方出牌后",Skill.WithTarget.class),
+    AfterEnemyPlay("敌方出牌后",Skill.WithTarget.class),
     Boost("增幅",FollowCard.class,true),
 
     WhenOtherAttack("友方随从攻击时", Damage.class),// TODO
@@ -39,6 +40,7 @@ public enum EffectTiming {
 
 
     AfterDamaged("受伤时",Damage.class),
+    AfterAreaFollowDamaged("场上随从受伤时",Damage.class),
     AfterLeaderDamaged("主战者受伤后",Damage.class),
     AfterEnemyLeaderDamaged("敌方主战者受伤后",Damage.class),
     LeaderHealing("主战者回复时",Damage.class),
@@ -71,6 +73,8 @@ public enum EffectTiming {
     WhenCostPartyHot("发动派对狂欢时",Integer.class),
     Transmigration("轮回时"),
     WhenKill("击杀时",FollowCard.class),
+    WhenBreakBlock("击碎格挡时",Damage.class),
+    AfterFollowBlock("我方随从格挡后",Damage.class),
 
     // 特殊规则事件
     WhenSwapChara("切换时"),

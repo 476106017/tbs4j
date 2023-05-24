@@ -24,15 +24,13 @@ public class Zenigame extends FollowCard {
     private int block = 120;
     private String job = "宝可梦";
     private List<String> race = Lists.ofStr("水");
-    private String mark = """
-    """;
-    private String subMark = "";
 
     @Override
     public void init() {
         super.init();
         addSkill(Mizudeppou.class);
         addSkill(Mizunohodou.class);
+        addSkill(Karanikomoru.class);
     }
 
     @Getter

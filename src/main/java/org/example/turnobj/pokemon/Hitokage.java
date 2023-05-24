@@ -22,9 +22,6 @@ public class Hitokage extends FollowCard {
     private int block = 10;
     private String job = "宝可梦";
     private List<String> race = Lists.ofStr("火");
-    private String mark = """
-    """;
-    private String subMark = "";
 
     @Override
     public void init() {
@@ -70,7 +67,7 @@ public class Hitokage extends FollowCard {
         private List<String> race = Lists.ofStr("火");
         private String mark = """
         攻击目标, 有10%的几率使目标陷入3回合【灼伤】状态。
-        如果目标回合倒计时多于50，则有10%的几率使目标陷入1回合【离神】状态。
+        如果目标回合倒计时多于50，则有30%的几率使目标陷入1回合【离神】状态。
         """;
         private String subMark = "";
 
@@ -83,7 +80,7 @@ public class Hitokage extends FollowCard {
                     if(Math.random()<0.1){
                         enemyFollow.addKeywordN("灼伤",3);
                     }
-                    if(enemyFollow.getWaitTimeShow()>=50 && Math.random()<0.1){
+                    if(enemyFollow.getWaitTimeShow()>=50 && Math.random()<0.3){
                         enemyFollow.addKeyword("离神");
                     }
                 }));

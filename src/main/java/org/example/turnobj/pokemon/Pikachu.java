@@ -24,21 +24,36 @@ public class Pikachu extends FollowCard {
     private int block = 0;
     private String job = "宝可梦";
     private List<String> race = Lists.ofStr("电");
-    private String mark = """
-    每回合速度+1
-    """;
-    private String subMark = "";
 
     @Override
     public void init() {
         super.init();
+        addSkill(高速移动.class);
         addSkill(JuumannBoruto.class);
         addSkill(Denngekiha.class);
 
-        addEffects((new Effect(this,this, EffectTiming.BeginTurn, obj->
-            addSpeed(1)
-        )));
     }
+
+    @Getter
+    @Setter
+    public static class 高速移动 extends Skill {
+
+        private String name = "高速移动";
+        private String color = "#b6aeae";
+        private String job = "宝可梦";
+        private List<String> race = Lists.ofStr("天赋");
+        private String mark = """
+        每回合速度+1
+        """;
+        private String subMark = "";
+
+        public 高速移动() {
+            addEffects((new Effect(this,this, EffectTiming.BeginTurn, obj->
+                addSpeed(1)
+            )));
+        }
+    }
+
 
     @Getter
     @Setter

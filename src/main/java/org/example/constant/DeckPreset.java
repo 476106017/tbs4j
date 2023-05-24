@@ -5,6 +5,10 @@ import org.example.system.game.Leader;
 import org.example.turnobj.FollowCard;
 import org.example.turnobj.ThePlayer;
 import org.example.system.util.Maps;
+import org.example.turnobj.dota.鱼人夜行者;
+import org.example.turnobj.hsr.三月七;
+import org.example.turnobj.hsr.丹恒;
+import org.example.turnobj.hsr.开拓者;
 import org.example.turnobj.jojo.EnricoPucci;
 import org.example.turnobj.pokemon.Fusigidane;
 import org.example.turnobj.pokemon.Hitokage;
@@ -28,6 +32,12 @@ public class DeckPreset {
         ));
         decks.put("普奇神父完全体",List.of(
             EnricoPucci.class
+        ));
+        decks.put("星穹列车组",List.of(
+            开拓者.class, 三月七.class, 丹恒.class
+        ));
+        decks.put("DotA",List.of(
+            鱼人夜行者.class
         ));
     }
     public static List describe(){

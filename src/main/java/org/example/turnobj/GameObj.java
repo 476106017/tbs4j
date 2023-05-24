@@ -12,9 +12,11 @@ import org.example.system.game.PlayerInfo;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.example.system.util.TurnWrapper.TURN_DISTANCE;
+
 @Getter
 @Setter
-public abstract class GameObj extends TurnObject {
+public abstract class GameObj {
 
     private static int id_iter=10000; //共用的静态变量
     public final int id;
@@ -109,5 +111,48 @@ public abstract class GameObj extends TurnObject {
         id_iter++;
         id = id_iter;
     }
+
+    // region 作为回合制对象的属性
+
+    int passage = 0;
+    int waitTimeShow = 0;
+    int tempSpeed = 0;
+    public abstract void setSpeed(int speed);
+    public abstract int getSpeed();
+    public void addSpeed(int speed) {
+        if(speed==0)return;
+        info.msg(this.getNameWithOwner() + "获得了" + speed + "点速度");
+        final int newSpeed = Math.max(getSpeed()+speed, 1);
+        setSpeed(newSpeed);
+    }
+    public void addTempSpeed(int speed) {
+        if(speed==0)return;
+        info.msg(this.getNameWithOwner() + "获得了临时速度");
+        if(getSpeed()+speed <= 0){
+            setTempSpeed(getTempSpeed()+1-getSpeed());
+            setSpeed(1);
+        }else {
+            setTempSpeed(getTempSpeed()+speed);
+            addSpeed(speed);
+        }
+    }
+
+    public boolean readyForTurn(){
+        return passage/TURN_DISTANCE > 0;
+    }
+    public boolean stepOnce(){
+        passage+=getSpeed();
+        return readyForTurn();
+    }
+
+    public void endTurn(){
+        passage-=TURN_DISTANCE;
+    }
+
+    public int waitTime (){
+        final int distanceToEnding = TURN_DISTANCE - passage;
+        return distanceToEnding/getSpeed();
+    }
+    // endregion 作为回合制对象的属性
 
 }

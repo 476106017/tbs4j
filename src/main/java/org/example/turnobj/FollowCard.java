@@ -36,6 +36,10 @@ public abstract class FollowCard extends GameObj {
             card.setBaseFollow(this);
             card.init();
             getSkills().add(card);
+
+            if(card.getRace().contains("天赋")){
+                card.getEffects().forEach(this::addEffects);
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -59,8 +63,6 @@ public abstract class FollowCard extends GameObj {
 
     public abstract String getJob();
     public abstract List<String> getRace();
-    public abstract String getMark();
-    public abstract String getSubMark();
 
     @Override
     public void init() {
@@ -100,6 +102,9 @@ public abstract class FollowCard extends GameObj {
     }
     public void clearCount(String key){
         counter.remove(key);
+    }
+    public void setCount(String key,int time){
+        counter.put(key, time);
     }
     public void count(String key,int time){
         counter.merge(key, time, Integer::sum);
@@ -332,6 +337,9 @@ public abstract class FollowCard extends GameObj {
         setMagicResist(getMagicResist() + n);
     }
 
+    public void addMaxHp(int hpMax){
+        setMaxHp(getMaxHp() + hpMax);
+    }
     @Override
     public String toString() {
         return "\t"+getName()+"\t生命："+getHp()+"\t攻击力："+getAtk()+"\t速度："+getSpeed()

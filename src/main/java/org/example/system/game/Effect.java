@@ -104,7 +104,7 @@ public class Effect{
                 if (List.of(EffectTiming.WhenKill, EffectTiming.WhenAtArea,
                         EffectTiming.WhenRecalled, EffectTiming.WhenOthersRecall,
                         EffectTiming.WhenOverDraw, EffectTiming.WhenEnemyOverDraw,
-                        EffectTiming.Entering, EffectTiming.AfterDamaged,
+                        EffectTiming.Entering, EffectTiming.AfterDamaged,EffectTiming.WhenBreakBlock,
                         EffectTiming.WhenDraw, EffectTiming.WhenEnemyDraw,
                         EffectTiming.WhenSummon, EffectTiming.WhenEnemySummon,
                         EffectTiming.WhenDestroy, EffectTiming.WhenEnemyDestroy,
@@ -122,11 +122,12 @@ public class Effect{
                     && card.atArea()) return;
                 // endregion 判断结算时是否离场
 
-                if (effect.getTiming().isSecret())
-                    info.msgTo(ownerPlayer.getSession(), effectOwnerCard.getNameWithOwner() + "发动【" + effect.getTiming().getName() + "】效果");
-                else
-                    info.msg(effectOwnerCard.getNameWithOwner() + "发动【" + effect.getTiming().getName() + "】效果");
-
+                if(effect.getOwnerObj() instanceof FollowCard ){
+                    if (effect.getTiming().isSecret())
+                        info.msgTo(ownerPlayer.getSession(), effectOwnerCard.getNameWithOwner() + "发动【" + effect.getTiming().getName() + "】效果");
+                    else
+                        info.msg(effectOwnerCard.getNameWithOwner() + "发动【" + effect.getTiming().getName() + "】效果");
+                }
                 effect.getEffect().accept(param);
             }
         }

@@ -13,10 +13,14 @@ var cardHtml = function(card){
     return `
         <div class="card col-sm-6 col-md-4 col-lg-2 id-${card.id} ${card.TYPE} ${card.canAttack?'canAttack':''} ${card.canDash?'canDash':''}"
             style="background-color: ${card.color}">
-            <img src="https://c-1316363893.cos.ap-nanjing.myqcloud.com/${encodeURIComponent(card.name)}.png" alt="" class="image" onerror="this.src='error.webp'">
+            <img src="https://c-1316363893.cos.ap-nanjing.myqcloud.com/${encodeURIComponent(card.name)}.png" alt="" class="image" onerror="this.hidden='hidden'">
             <div class="name">${card.name}</div>
             ${card.race.length>0?'<p class="race">'+card.race.join(' ')+'</p>':""}
-            <div class="description" title="${card.mark}">
+            <div class="description" title="${dictShow(card.counter)}">
+                
+                <p ${card.TYPE=="FOLLOW" || card.charge==100 ?"hidden":""}>
+                    （充能中：${card.charge}/100）
+                </p>
                 <p>${card.keywords?'<b class="keyword">'+distinctArr(card.keywords).join(' ')+'</b>\n':""}
                     ${card.TYPE=="FOLLOW"?'速度：'+card.speed+'&nbsp;&nbsp;&nbsp;&nbsp; 攻击：'+card.atk + '\n护甲：'+ card.armor + '&nbsp;&nbsp;&nbsp;&nbsp; 魔抗：'+card.magicResist:card.mark}
                 </p>

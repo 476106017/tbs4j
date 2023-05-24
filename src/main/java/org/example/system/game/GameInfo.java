@@ -107,6 +107,12 @@ public class GameInfo implements Serializable {
         incommingDamages = new ArrayList<>();
         incommingDamagesCopy.forEach(damage->{
             damage.getTo().useEffects(EffectTiming.AfterDamaged,damage);
+            damage.getTo().ownerPlayer().getAreaCopy().forEach(followCard -> {
+                followCard.useEffects(EffectTiming.AfterAreaFollowDamaged,damage);
+                if(damage.isBreakBlock()){
+                    followCard.useEffects(EffectTiming.AfterFollowBlock,damage);
+                }
+            });
         });
 
         Map<FollowCard, EventType> eventsCopy = events;
@@ -319,6 +325,13 @@ public class GameInfo implements Serializable {
             if(!areaCard.atArea())return;
             areaCard.useEffects(EffectTiming.BeginTurn);
         });
+
+        turnObject.getSkills().forEach(skill -> {
+            final int charge = skill.getCharge();
+            if(charge < 100){
+                skill.setCharge(Math.min(100,charge + skill.getChargeSpeed()));
+            }
+        });
     }
 
     public void addMoreTurn(){
@@ -406,7 +419,7 @@ public class GameInfo implements Serializable {
     }
 
     public void damageMulti(FollowCard from,List<FollowCard> objs, int damage){
-        List<Damage> damages = objs.stream().map(obj -> new Damage(from, obj, damage)).toList();
+        List<Damage> damages = objs.stream().filter(Objects::nonNull).map(obj -> new Damage(from, obj, damage)).toList();
         new DamageMulti(this,damages).apply();
     }
     public void damageAttacking(FollowCard from, FollowCard to){

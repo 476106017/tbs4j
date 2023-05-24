@@ -5,12 +5,15 @@ import lombok.Setter;
 import org.example.constant.EffectTiming;
 import org.example.system.game.Play;
 
+import java.lang.annotation.Target;
 import java.util.List;
 
 @Getter
 @Setter
 public abstract class Skill extends GameObj {
     int speed = 0;
+    int charge = 0;
+    int chargeSpeed = 100;
     transient FollowCard baseFollow;
 
     public abstract String getJob();
@@ -20,24 +23,40 @@ public abstract class Skill extends GameObj {
 
     private transient Play play = null;
 
+    private boolean interrupt = false;
+
+    public record WithTarget(Skill skill, GameObj target){};
     public void play(GameObj target){
+        if(getRace().contains("天赋")){
+            info.msgToThisPlayer("无法主动使用天赋！");
+            return;
+        }
+        if(charge<100){
+            info.msgToThisPlayer("技能尚未准备好！");
+            return;
+        }
+        charge = 0;
         info.msg(info.getTurnObject().getName() + "使用了" + getName());
 
-
+        final WithTarget withTarget = new WithTarget(this, target);
         // region 在使用卡牌造成任何影响前，先计算使用时
-        ownerLeader().useEffects(EffectTiming.WhenPlay,this);
-        enemyLeader().useEffects(EffectTiming.WhenEnemyPlay,this);
-        ownerPlayer().getAreaCopy().forEach(areaCard -> areaCard.useEffects(EffectTiming.WhenPlay,this));
-        enemyPlayer().getAreaCopy().forEach(areaCard -> areaCard.useEffects(EffectTiming.WhenEnemyPlay,this));
+        ownerLeader().useEffects(EffectTiming.WhenPlay,withTarget);
+        enemyLeader().useEffects(EffectTiming.WhenEnemyPlay,withTarget);
+        ownerPlayer().getAreaCopy().forEach(areaCard -> areaCard.useEffects(EffectTiming.WhenPlay,withTarget));
+        enemyPlayer().getAreaCopy().forEach(areaCard -> areaCard.useEffects(EffectTiming.WhenEnemyPlay,withTarget));
         // endregion 在使用卡牌造成任何影响前，先计算使用时
 
+        if(interrupt){
+            interrupt = false;
+            return;
+        }
 
         // region 发动卡牌效果
         // 没有可选择目标时不发动效果
-        if(!getPlay().canTargets().get().isEmpty() && target==null){
+        if(!getPlay().canTargets().get().isEmpty() && withTarget.target()==null){
             info.msg(getNameWithOwner() + "因为没有目标而无法发动效果！");
         }else {
-            getPlay().effect().accept(target);
+            getPlay().effect().accept(withTarget.target());
         }
         // endregion 发动卡牌效果
 
@@ -52,10 +71,10 @@ public abstract class Skill extends GameObj {
         getInfo().getPlayedSkills().add(this);
 
         // region 计算使用后
-        ownerLeader().useEffects(EffectTiming.AfterPlay,this);
-        enemyLeader().useEffects(EffectTiming.AfterEnemyPlay,this);
-        ownerPlayer().getAreaCopy().forEach(areaCard -> areaCard.useEffects(EffectTiming.AfterPlay,this));
-        enemyPlayer().getAreaCopy().forEach(areaCard -> areaCard.useEffects(EffectTiming.AfterEnemyPlay,this));
+        ownerLeader().useEffects(EffectTiming.AfterPlay,withTarget);
+        enemyLeader().useEffects(EffectTiming.AfterEnemyPlay,withTarget);
+        ownerPlayer().getAreaCopy().forEach(areaCard -> areaCard.useEffects(EffectTiming.AfterPlay,withTarget));
+        enemyPlayer().getAreaCopy().forEach(areaCard -> areaCard.useEffects(EffectTiming.AfterEnemyPlay,withTarget));
         // endregion 计算使用后
         info.startEffect();
 

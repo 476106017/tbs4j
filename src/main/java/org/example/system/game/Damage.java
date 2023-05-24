@@ -2,6 +2,7 @@ package org.example.system.game;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.example.constant.EffectTiming;
 import org.example.turnobj.FollowCard;
 import org.example.turnobj.GameObj;
 
@@ -19,6 +20,9 @@ public class Damage{
     boolean isCounter = false;
     boolean isFromAtk = false;
     boolean miss = false;
+
+    boolean useBlock = false;
+    boolean breakBlock = false;
 
     public Damage(GameObj from, FollowCard to, int damage) {
         this.from = from;
@@ -87,7 +91,8 @@ public class Damage{
             if (!isFromAtk && to.hasKeyword("效果伤害免疫")) {
                 setDamage(0);
                 to.getInfo().msg(to.getNameWithOwner() + "免疫了效果伤害！");
-            } else if(!to.hasKeyword("穿透")) {
+            } else if(!(from instanceof FollowCard fromFollow
+                && fromFollow.hasKeyword("穿透"))) {
                 // 没有穿透效果，计算减免
                 float reduce = 0;
                 if (isFromAtk())
@@ -99,10 +104,15 @@ public class Damage{
 
                 int parry = to.getBlock();
                 if(getDamage()>0 && parry>0){
+                    useBlock = true;
                     int parryReduce = Math.min(getDamage(), parry);
                     setDamage(getDamage() - parryReduce);
                     to.setBlock(parry - parryReduce);
                     to.getInfo().msg(to.getNameWithOwner() + "格挡了" + parryReduce + "点伤害（还剩"+to.countKeyword("格挡")+"点格挡）");
+                    if(parry == parryReduce){
+                        breakBlock = true;
+                        from.tempEffects(EffectTiming.WhenBreakBlock,this);
+                    }
                 }
             }
         }

@@ -25,9 +25,6 @@ public class Fusigidane extends FollowCard {
     private int block = 50;
     private String job = "宝可梦";
     private List<String> race = Lists.ofStr("草","毒");
-    private String mark = """
-    """;
-    private String subMark = "";
 
     @Override
     public void init() {
