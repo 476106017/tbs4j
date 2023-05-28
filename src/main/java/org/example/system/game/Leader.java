@@ -4,6 +4,7 @@ import jakarta.websocket.Session;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.constant.EffectTiming;
+import org.example.turnobj.FollowCard;
 import org.example.turnobj.GameObj;
 import org.example.system.util.Msg;
 
@@ -29,9 +30,9 @@ public abstract class Leader extends GameObj {
     public abstract void setMark(String mark);
 
 
-    public List<GameObj> targetable(){return new ArrayList<>();}
+    public List<FollowCard> targetable(){return new ArrayList<>();}
 
-    public void skill(GameObj target){
+    public void skill(FollowCard target){
         GameInfo info = ownerPlayer().getInfo();
         Session me = ownerPlayer().getSession();
 

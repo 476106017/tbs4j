@@ -69,7 +69,7 @@ public class 开拓者 extends FollowCard {
 
         public 再见安打() {
             setPlay(new Play(
-                () -> enemyPlayer().getAreaGameObj(), true,
+                () -> enemyPlayer().getArea(), true,
                 obj->{
                     final FollowCard enemyFollow = (FollowCard) obj;
                     getBaseFollow().attack(enemyFollow);
@@ -96,7 +96,7 @@ public class 开拓者 extends FollowCard {
         public 安息全垒打() {
             setChargeSpeed(35);
             setPlay(new Play(
-                () -> enemyPlayer().getAreaGameObj(), true,
+                () -> enemyPlayer().getArea(), true,
                 obj->{
                     final FollowCard enemyFollow = (FollowCard) obj;
                     final List<FollowCard> enemyArea = enemyPlayer().getArea();

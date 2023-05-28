@@ -31,6 +31,7 @@ public class 丹恒 extends FollowCard {
         super.init();
         addSkill(寸长寸强.class);
         addSkill(云骑枪术疾雨.class);
+        addSkill(洞天幻化长梦一觉.class);
     }
 
     @Getter
@@ -75,7 +76,7 @@ public class 丹恒 extends FollowCard {
 
         public 云骑枪术疾雨() {
             setPlay(new Play(
-                () -> enemyPlayer().getAreaGameObj(), true,
+                () -> enemyPlayer().getArea(), true,
                 obj->{
                     final FollowCard enemyFollow = (FollowCard) obj;
                     if(Math.random()<0.2) {
@@ -108,18 +109,17 @@ public class 丹恒 extends FollowCard {
         public 洞天幻化长梦一觉() {
             setChargeSpeed(50);
             setPlay(new Play(
-                () -> enemyPlayer().getAreaGameObj(), true,
+                () -> enemyPlayer().getArea(), true,
                 obj->{
-                    final FollowCard enemyFollow = (FollowCard) obj;
                     if(Math.random()<0.5) {
-                        final Damage damage = new Damage(getBaseFollow(), enemyFollow);
-                        damage.multi(enemyFollow.getTempSpeed()<0?3f:2f);
-                        new DamageMulti(getInfo(), List.of(damage, new Damage(enemyFollow, getBaseFollow()))).apply();
+                        final Damage damage = new Damage(getBaseFollow(), obj);
+                        damage.multi(obj.getTempSpeed()<0?3f:2f);
+                        new DamageMulti(getInfo(), List.of(damage, new Damage(obj, getBaseFollow()))).apply();
 
-                        final double speed = enemyFollow.getSpeed() * 0.12;
-                        enemyFollow.addTempSpeed(-(int)speed);
+                        final double speed = obj.getSpeed() * 0.12;
+                        obj.addTempSpeed(-(int)speed);
                     }else {
-                        getBaseFollow().attack(enemyFollow);
+                        getBaseFollow().attack(obj);
                     }
                 }));
         }

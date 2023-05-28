@@ -9,9 +9,10 @@ import org.example.system.game.GameInfo;
 import org.example.system.game.Leader;
 import org.example.system.game.PlayerInfo;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.function.Consumer;
 
+import static org.example.constant.CounterKey.DEFAULT;
 import static org.example.system.util.TurnWrapper.TURN_DISTANCE;
 
 @Getter
@@ -22,6 +23,8 @@ public abstract class GameObj {
     public final int id;
 
     public transient GameInfo info;
+
+    private Map<String,Integer> counter = new HashMap<>();
 
     public transient int owner = 0;
     public void changeOwner(){
@@ -46,7 +49,7 @@ public abstract class GameObj {
         return id;
     }
     public String getId(){
-        return getName() + "#" + hashCode()%10000;
+        return getName() + "#" + getTureId()%10000;
     }
 
     public String getNameWithOwner(){
@@ -154,5 +157,45 @@ public abstract class GameObj {
         return distanceToEnding/getSpeed();
     }
     // endregion 作为回合制对象的属性
+
+
+
+    public void count(){
+        count(DEFAULT,1);
+    }
+    public void count(int time){
+        count(DEFAULT,time);
+    }
+    public Integer getCount(){
+        return Optional.ofNullable(counter.get(DEFAULT)).orElse(0);
+    }
+    public Integer getCount(String key){
+        return Optional.ofNullable(counter.get(key)).orElse(0);
+    }
+    public void count(String key){
+        count(key,1);
+    }
+    public void clearCount(){
+        counter.remove(DEFAULT);
+    }
+    public void clearCount(String key){
+        counter.remove(key);
+    }
+    public void setCount(String key,int time){
+        counter.put(key, time);
+    }
+    public void count(String key,int time){
+        counter.merge(key, time, Integer::sum);
+    }
+
+
+
+    public void createCountCard(String name, int speed, FollowCard target, Consumer<FollowCard> exec) {
+        final CountCard card = new CountCard(name, speed, target, exec);
+        card.setOwner(getOwner());
+        card.setInfo(getInfo());
+        card.init();
+        info.getTurn().addObject(card);
+    }
 
 }

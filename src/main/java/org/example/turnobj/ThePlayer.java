@@ -35,16 +35,16 @@ public class ThePlayer extends Leader {
     }
 
     @Override
-    public List<GameObj> targetable() {
+    public List<FollowCard> targetable() {
         if(ownerPlayer().getCount(EP_NUM) == 0){
             return new ArrayList<>();
         }
 
-        return ownerPlayer().getAreaGameObj();
+        return ownerPlayer().getArea();
     }
 
     @Override
-    public void skill(GameObj target) {
+    public void skill(FollowCard target) {
         super.skill(target);
 
         FollowCard follow = (FollowCard) target;

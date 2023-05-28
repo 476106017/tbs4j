@@ -49,7 +49,7 @@ public class Fusigidane extends FollowCard {
 
         public Tsurunomuti() {
             setPlay(new Play(
-                () -> enemyPlayer().getAreaGameObj(), true,
+                () -> enemyPlayer().getArea(), true,
                 obj->{
                     final FollowCard enemyFollow = (FollowCard) obj;
                     getBaseFollow().attack(enemyFollow);
@@ -74,7 +74,7 @@ public class Fusigidane extends FollowCard {
 
         public Happakattaa() {
             setPlay(new Play(
-                () -> enemyPlayer().getAreaGameObj(), true,
+                () -> enemyPlayer().getArea(), true,
                 obj->{
                     addTempSpeed(-10);
                     final FollowCard enemyFollow = (FollowCard) obj;
@@ -108,7 +108,7 @@ public class Fusigidane extends FollowCard {
             setPlay(new Play(
                 () -> {
                     if(ready)
-                        return enemyPlayer().getAreaGameObj();
+                        return enemyPlayer().getArea();
                     else
                         return new ArrayList<>();
                 }, false,

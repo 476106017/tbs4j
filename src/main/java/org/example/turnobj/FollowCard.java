@@ -1,5 +1,6 @@
 package org.example.turnobj;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.constant.CardType;
@@ -7,13 +8,14 @@ import org.example.constant.EffectTiming;
 import org.example.system.game.*;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static org.example.constant.CounterKey.DEATH_PREFIX;
-import static org.example.constant.CounterKey.DEFAULT;
 
 @Getter
 @Setter
+@EqualsAndHashCode(callSuper=false)
 public abstract class FollowCard extends GameObj {
 
     public final CardType TYPE = CardType.FOLLOW;
@@ -45,7 +47,6 @@ public abstract class FollowCard extends GameObj {
         }
     }
 
-    private Map<String,Integer> counter = new HashMap<>();
 
     private List<String> keywords = new ArrayList<>();
 
@@ -80,34 +81,6 @@ public abstract class FollowCard extends GameObj {
 
     public boolean atArea(){
         return ownerPlayer().getArea().contains(this);
-    }
-
-    public void count(){
-        count(DEFAULT,1);
-    }
-    public void count(int time){
-        count(DEFAULT,time);
-    }
-    public Integer getCount(){
-        return Optional.ofNullable(counter.get(DEFAULT)).orElse(0);
-    }
-    public Integer getCount(String key){
-        return Optional.ofNullable(counter.get(key)).orElse(0);
-    }
-    public void count(String key){
-        count(key,1);
-    }
-    public void clearCount(){
-        counter.remove(DEFAULT);
-    }
-    public void clearCount(String key){
-        counter.remove(key);
-    }
-    public void setCount(String key,int time){
-        counter.put(key, time);
-    }
-    public void count(String key,int time){
-        counter.merge(key, time, Integer::sum);
     }
 
     public String getKeywordStr(){
@@ -156,20 +129,23 @@ public abstract class FollowCard extends GameObj {
         return (int) getKeywords().stream().filter(p->p.equals(k)).count();
     }
 
-    public void removeKeywords(List<String> ks){
-        ks.forEach(this::removeKeyword);
+    public int removeKeywords(List<String> ks){
+        return (int) ks.stream().filter(this::removeKeyword).count();
     }
-    public void removeKeyword(String k){
+    public boolean removeKeyword(String k){
+        AtomicBoolean _return = new AtomicBoolean(false);
         getKeywords().stream()
             .filter(keyword -> keyword.equals(k))
             .findFirst()
             .ifPresent(s -> {
+                _return.set(true);
                 getKeywords().remove(s);
                 if(hasKeyword(s))
                     info.msg(getNameWithOwner()+"失去了1层【"+ k +"】");
                 else
                     info.msg(getNameWithOwner()+"失去了【"+ k +"】");
             });
+        return _return.get();
     }
     public void removeKeyword(String k,int n){
         List<String> keys = getKeywords().stream()
@@ -238,7 +214,7 @@ public abstract class FollowCard extends GameObj {
         useEffects(EffectTiming.WhenNoLongerAtArea);
 
         // 从回合对象中删除该随从
-        getInfo().getTurn().getObjects().remove(this);
+        getInfo().getTurn().removeObject(this);
 
         try {
             Thread.sleep(500);
@@ -286,6 +262,15 @@ public abstract class FollowCard extends GameObj {
         }else {
             info.msg(this.getNameWithOwner() + "没有回复生命值（剩余" + this.getHp() + "点生命值）");
         }
+    }
+    public int purifyNegative(){
+        int i = removeKeywords(List.of("眩晕", "灼伤", "离神", "混乱"));
+        if(getTempSpeed()<0){
+            i ++;
+            addSpeed(-getTempSpeed());
+            setTempSpeed(0);
+        }
+        return i;
     }
     public void purify(){
         if(!atArea())return;

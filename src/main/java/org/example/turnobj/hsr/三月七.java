@@ -85,7 +85,7 @@ public class 三月七 extends FollowCard {
 
         public 极寒的弓矢() {
             setPlay(new Play(
-                () -> enemyPlayer().getAreaGameObj(), true,
+                () -> enemyPlayer().getArea(), true,
                 obj->{
                     final FollowCard enemyFollow = (FollowCard) obj;
                     getBaseFollow().attack(enemyFollow);
@@ -111,7 +111,7 @@ public class 三月七 extends FollowCard {
 
         public 可爱即是正义() {
             setPlay(new Play(
-                () -> ownerPlayer().getAreaGameObj(), true,
+                () -> ownerPlayer().getArea(), true,
                 obj->{
                     final FollowCard follow = (FollowCard) obj;
                     follow.addBlock(80);

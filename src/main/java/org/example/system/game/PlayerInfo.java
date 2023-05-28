@@ -4,6 +4,7 @@ import jakarta.websocket.Session;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.constant.EffectTiming;
+import org.example.system.util.Lists;
 import org.example.turnobj.FollowCard;
 import org.example.turnobj.GameObj;
 
@@ -79,6 +80,10 @@ public class PlayerInfo implements Serializable {
 
     public List<FollowCard> getAreaBy(Predicate<FollowCard> p){
         return getArea().stream().filter(p).toList();
+    }
+
+    public FollowCard getAreaRandomFollow(){
+        return Lists.randOf(getArea());
     }
 
     public void addArea(FollowCard areaCard){

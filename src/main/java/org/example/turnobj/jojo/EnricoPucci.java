@@ -89,7 +89,7 @@ public class EnricoPucci extends FollowCard {
 
         public StandAttack() {
             setPlay(new Play(
-                () -> enemyPlayer().getAreaGameObj(), true,
+                () -> enemyPlayer().getArea(), true,
                 obj->{
                     getBaseFollow().attack((FollowCard) obj);
                 }));

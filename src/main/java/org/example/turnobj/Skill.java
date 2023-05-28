@@ -5,7 +5,6 @@ import lombok.Setter;
 import org.example.constant.EffectTiming;
 import org.example.system.game.Play;
 
-import java.lang.annotation.Target;
 import java.util.List;
 
 @Getter
@@ -25,8 +24,8 @@ public abstract class Skill extends GameObj {
 
     private boolean interrupt = false;
 
-    public record WithTarget(Skill skill, GameObj target){};
-    public void play(GameObj target){
+    public record WithTarget(Skill skill, FollowCard target){};
+    public void play(FollowCard target){
         if(getRace().contains("天赋")){
             info.msgToThisPlayer("无法主动使用天赋！");
             return;

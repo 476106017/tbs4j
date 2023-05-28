@@ -45,7 +45,7 @@ public class Hitokage extends FollowCard {
 
         public Hinoko() {
             setPlay(new Play(
-                () -> enemyPlayer().getAreaGameObj(), true,
+                () -> enemyPlayer().getArea(), true,
                 obj->{
                     final FollowCard enemyFollow = (FollowCard) obj;
                     info.damageEffect(getBaseFollow(), enemyFollow,40);
@@ -73,7 +73,7 @@ public class Hitokage extends FollowCard {
 
         public Honoonokiba() {
             setPlay(new Play(
-                () -> enemyPlayer().getAreaGameObj(), true,
+                () -> enemyPlayer().getArea(), true,
                 obj->{
                     final FollowCard enemyFollow = (FollowCard) obj;
                     getBaseFollow().attack(enemyFollow);

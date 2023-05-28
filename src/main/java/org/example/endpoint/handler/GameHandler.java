@@ -37,13 +37,14 @@ public class GameHandler {
         if (room == null) return;
         GameInfo info = roomGame.get(room);
         PlayerInfo player = info.thisPlayer();
-        final FollowCard turnObject = info.getTurnObject();
+        final GameObj gameObj = info.getTurnObject();
         // endregion
 
         boolean myTurn = client.equals(player.getSession());
-        if (!myTurn) {
+        if (!(gameObj instanceof FollowCard) || !myTurn) {
             player = info.oppositePlayer();
         }
+        final FollowCard turnObject = (FollowCard) gameObj;
 
         if (msg.isBlank()) {
             Msg.warn(client, "打出卡牌：play <手牌序号> <目标id> s<抉择序号>；");
@@ -75,12 +76,12 @@ public class GameHandler {
         Play play = card.getPlay();
 
         // region 获取选择目标
-        GameObj target = null;
-        final List<GameObj> canTargets = play.canTargets().get();
+        FollowCard target = null;
+        final List<FollowCard> canTargets = play.canTargets().get();
         try {
             // 获取选择对象
-            Optional<GameObj> targetOpt = canTargets
-                .stream().filter(gameObj -> gameObj.id == Integer.parseInt(split[1])).findFirst();
+            Optional<FollowCard> targetOpt = canTargets
+                .stream().filter(followCard -> followCard.id == Integer.parseInt(split[1])).findFirst();
             if (targetOpt.isPresent()) {
                 target = targetOpt.get();
             }
@@ -93,6 +94,10 @@ public class GameHandler {
             card.play(target);
         else {
             if(!canTargets.isEmpty()){
+                if(card.getCharge()<100){
+                    info.msgToThisPlayer("技能尚未准备好！");
+                    return;
+                }
                 Msg.send(client, "请指定目标！");
                 Msg.send(client,"target",
                     Maps.newMap("pref",msg,"targets", canTargets));
@@ -120,7 +125,7 @@ public class GameHandler {
         }
 
         Leader leader = player.getLeader();
-        List<GameObj> targetable = leader.targetable();
+        List<FollowCard> targetable = leader.targetable();
         if (msg.isBlank()) {// 没有输入指定对象
             if (leader.isNeedTarget()) {
                 if (targetable.isEmpty()) {
@@ -139,7 +144,7 @@ public class GameHandler {
                 Msg.warn(client, "不可指定目标！");
                 return;
             }
-            GameObj target = null;
+            FollowCard target = null;
             try {
                 int indexId = Integer.parseInt(msg);
                 // 获取选择对象

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.constant.EffectTiming;
 import org.example.system.effectobj.Fire;
+import org.example.turnobj.CountCard;
 import org.example.turnobj.FollowCard;
 import org.example.turnobj.GameObj;
 import org.example.turnobj.Skill;
@@ -30,7 +31,7 @@ public class GameInfo implements Serializable {
     int chainDeep = 3;
     boolean isReset = false;
     TurnWrapper turn;
-    FollowCard turnObject;
+    GameObj turnObject;
     int turnPlayer;
     int moreTurn = 0;// 追加回合
     boolean gameset = false;
@@ -241,26 +242,40 @@ public class GameInfo implements Serializable {
             msg("倒计时300秒！");
         }
 
-        getTurnObject().removeKeyword("混乱");
-        getTurnObject().removeKeyword("离神");
+        if(getTurnObject() instanceof FollowCard followCard){
+            followCard.removeKeyword("混乱");
+            followCard.removeKeyword("离神");
 
-        if(getTurnObject().hasKeyword("混乱")){
-            if(Math.random()<0.3333){
-                msg(turnObject.getNameWithOwner()+"陷入混乱！");
-                damageEffect(turnObject,turnObject,40);
+            if(followCard.hasKeyword("混乱")){
+                if(Math.random()<0.3333){
+                    msg(followCard.getNameWithOwner()+"陷入混乱！");
+                    damageEffect(followCard,followCard,40);
+                    endTurnOfCommand();
+                    return;
+                }
+            }
+            if(followCard.hasKeyword("离神")){
+                msg(turnObject.getNameWithOwner()+"跳过回合！");
                 endTurnOfCommand();
                 return;
             }
-        }
-        if(getTurnObject().hasKeyword("离神")){
-            msg(turnObject.getNameWithOwner()+"跳过回合！");
-            endTurnOfCommand();
-            return;
         }
 
         pushInfo();
         msg(turnObject.getNameWithOwner()+"的回合");
 
+
+        if(getTurnObject() instanceof CountCard countCard){
+            msg(turnObject.getNameWithOwner()+"触发了效果！");
+            countCard.getExec().accept(countCard.getTarget());
+            try {
+                Thread.sleep(500);
+                pushInfo();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            endTurnOfCommand();
+        }
     }
 
     public void endTurnOfTimeout(){
@@ -268,23 +283,28 @@ public class GameInfo implements Serializable {
         endTurn();
     }
     public void endTurnOfCommand(){
-        getTurnObject().endTurn();
         thisPlayer().setShortRope(false);
         rope.cancel(true);
         endTurn();
     }
 
     public void endTurn(){
+        getTurnObject().endTurn();
         msg(thisPlayer().getName()+"的回合结束");
 
-        if(getTurnObject().hasKeyword("灼伤")){
-            damageEffect(new Fire(),getTurnObject(),getTurnObject().getHp()/16);
-            getTurnObject().removeKeyword("灼伤");
-        }
+        if(getTurnObject() instanceof FollowCard followCard){
 
-        // 发动回合结束效果
-        if(!getTurnObject().atArea())return;
-        getTurnObject().useEffects(EffectTiming.EndTurn);
+            if(followCard.hasKeyword("灼伤")){
+                damageEffect(new Fire(),followCard,followCard.getHp()/16);
+                followCard.removeKeyword("灼伤");
+            }
+
+            // 发动回合结束效果
+            if(!followCard.atArea())return;
+            followCard.useEffects(EffectTiming.EndTurn);
+        }else if(getTurnObject() instanceof CountCard countCard){
+            getTurn().removeObject(countCard);
+        }
 
         // 发动主战者效果
         Leader leader = thisPlayer().getLeader();
@@ -326,12 +346,14 @@ public class GameInfo implements Serializable {
             areaCard.useEffects(EffectTiming.BeginTurn);
         });
 
-        turnObject.getSkills().forEach(skill -> {
-            final int charge = skill.getCharge();
-            if(charge < 100){
-                skill.setCharge(Math.min(100,charge + skill.getChargeSpeed()));
-            }
-        });
+        if(turnObject instanceof FollowCard followCard){
+            followCard.getSkills().forEach(skill -> {
+                final int charge = skill.getCharge();
+                if(charge < 100){
+                    skill.setCharge(Math.min(100,charge + skill.getChargeSpeed()));
+                }
+            });
+        }
     }
 
     public void addMoreTurn(){

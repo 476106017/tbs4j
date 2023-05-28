@@ -71,7 +71,7 @@ public class Pikachu extends FollowCard {
 
         public JuumannBoruto() {
             setPlay(new Play(
-                () -> enemyPlayer().getAreaGameObj(), true,
+                () -> enemyPlayer().getArea(), true,
                 obj->{
                     final FollowCard enemyFollow = (FollowCard) obj;
                     info.damageEffect(getBaseFollow(), enemyFollow,90);
@@ -99,7 +99,7 @@ public class Pikachu extends FollowCard {
 
         public Denngekiha() {
             setPlay(new Play(
-                () -> enemyPlayer().getAreaGameObj(), true,
+                () -> enemyPlayer().getArea(), true,
                 obj->{
                     final FollowCard enemyFollow = (FollowCard) obj;
                     info.damageEffect(getBaseFollow(), enemyFollow,40);

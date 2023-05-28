@@ -9,6 +9,7 @@ import org.example.turnobj.dota.鱼人夜行者;
 import org.example.turnobj.hsr.三月七;
 import org.example.turnobj.hsr.丹恒;
 import org.example.turnobj.hsr.开拓者;
+import org.example.turnobj.hsr.艾丝妲;
 import org.example.turnobj.jojo.EnricoPucci;
 import org.example.turnobj.pokemon.Fusigidane;
 import org.example.turnobj.pokemon.Hitokage;
@@ -34,7 +35,7 @@ public class DeckPreset {
             EnricoPucci.class
         ));
         decks.put("星穹列车组",List.of(
-            开拓者.class, 三月七.class, 丹恒.class
+            开拓者.class, 三月七.class, 丹恒.class, 艾丝妲.class
         ));
         decks.put("DotA",List.of(
             鱼人夜行者.class

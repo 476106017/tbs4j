@@ -48,7 +48,7 @@ public class Zenigame extends FollowCard {
 
         public Mizudeppou() {
             setPlay(new Play(
-                () -> enemyPlayer().getAreaGameObj(), true,
+                () -> enemyPlayer().getArea(), true,
                 obj->{
                     final FollowCard enemyFollow = (FollowCard) obj;
                     if(Math.random()<0.1){
@@ -78,7 +78,7 @@ public class Zenigame extends FollowCard {
 
         public Mizunohodou() {
             setPlay(new Play(
-                () -> enemyPlayer().getAreaGameObj(), true,
+                () -> enemyPlayer().getArea(), true,
                 obj->{
                     final FollowCard enemyFollow = (FollowCard) obj;
                     getBaseFollow().attack(enemyFollow);
@@ -105,7 +105,7 @@ public class Zenigame extends FollowCard {
 
         public Karanikomoru() {
             setPlay(new Play(
-                () -> ownerPlayer().getAreaGameObj(), true,
+                () -> ownerPlayer().getArea(), true,
                 obj->{
                     final FollowCard followCard = (FollowCard) obj;
                     if(Math.random()<0.1){
