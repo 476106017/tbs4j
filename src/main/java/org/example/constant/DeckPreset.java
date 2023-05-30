@@ -5,6 +5,9 @@ import org.example.system.game.Leader;
 import org.example.turnobj.FollowCard;
 import org.example.turnobj.ThePlayer;
 import org.example.system.util.Maps;
+import org.example.turnobj.dota.幻影刺客;
+import org.example.turnobj.dota.敌法师;
+import org.example.turnobj.dota.斧王;
 import org.example.turnobj.dota.鱼人夜行者;
 import org.example.turnobj.hsr.三月七;
 import org.example.turnobj.hsr.丹恒;
@@ -38,7 +41,7 @@ public class DeckPreset {
             开拓者.class, 三月七.class, 丹恒.class, 艾丝妲.class
         ));
         decks.put("DotA",List.of(
-            鱼人夜行者.class
+            鱼人夜行者.class, 敌法师.class, 斧王.class, 幻影刺客.class
         ));
     }
     public static List describe(){

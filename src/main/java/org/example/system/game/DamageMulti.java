@@ -38,7 +38,7 @@ public class DamageMulti {
                 "（剩余"+ to.getHp()+"点生命值）");
 
             try {
-                Thread.sleep(500);
+                Thread.sleep(200);
                 info.pushInfo();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);

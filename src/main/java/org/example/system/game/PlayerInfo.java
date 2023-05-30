@@ -5,8 +5,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.constant.EffectTiming;
 import org.example.system.util.Lists;
+import org.example.system.util.Msg;
 import org.example.turnobj.FollowCard;
 import org.example.turnobj.GameObj;
+import org.example.turnobj.SkillUpgrade;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -26,7 +29,9 @@ public class PlayerInfo implements Serializable {
     transient Session session;
     boolean initative;// 先攻
     boolean shortRope = false;
-    int areaMax = 4;
+    transient Thread discoverThread = null;
+    transient int discoverNum = 0; // 发现卡牌序号
+    transient int areaMax = 5;
     List<FollowCard> area = new ArrayList<>();
     transient List<FollowCard> graveyard = new ArrayList<>();
     Integer graveyardCount = 0;// 当墓地消耗时，只消耗计数，不消耗真实卡牌
@@ -133,5 +138,29 @@ public class PlayerInfo implements Serializable {
         getLeader().useEffects(EffectTiming.WhenEnemySummon,summonedCards);
 
         info.turn.addObject(summonedCards);
+    }
+
+    public void discoverCard(List<SkillUpgrade> cards){
+        if(cards.isEmpty()) return;
+        if(cards.size()==1){
+            cards.get(0).play();
+            return;
+        }
+
+        Msg.send(getSession(),"discover", cards);
+
+        discoverNum = -1;// -1代表正在发现
+        discoverThread = new Thread(()->{
+            SkillUpgrade discoverCard;
+            if(discoverNum<=0 || cards.size() < discoverNum)
+                discoverCard = Lists.randOf(cards);
+            else
+                discoverCard = cards.get(discoverNum-1);
+
+            discoverCard.play();
+            discoverNum = 0;
+            info.endTurnOfCommand();
+        });
+
     }
 }

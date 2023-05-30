@@ -114,6 +114,7 @@ public class ApiServerEndpoint {
 
                 case "chat" -> chatHandler.chat(session, param);
                 case "play" -> gameHandler.play(session, param);
+                case "discover" -> gameHandler.discover(session, param);
 
                 default -> Msg.send(session,"不存在的指令！");
             }

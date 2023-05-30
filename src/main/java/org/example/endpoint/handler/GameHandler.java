@@ -46,6 +46,11 @@ public class GameHandler {
         }
         final FollowCard turnObject = (FollowCard) gameObj;
 
+        if(player.getDiscoverNum() < 0){
+            Msg.warn(client,"请先发现卡牌！");
+            return;
+        }
+
         if (msg.isBlank()) {
             Msg.warn(client, "打出卡牌：play <手牌序号> <目标id> s<抉择序号>；");
             return;
@@ -108,6 +113,36 @@ public class GameHandler {
         }
     }
 
+
+    public void discover(Session client, String msg){
+
+        // region 获取游戏对象
+        String name = userNames.get(client);
+        String room = userRoom.get(client);
+        if(room==null)return;
+        GameInfo info = roomGame.get(room);
+        PlayerInfo player = info.thisPlayer();
+        PlayerInfo enemy = info.oppositePlayer();
+        // endregion
+        if(!client.equals(player.getSession())){
+            Msg.warn(client,"当前不是你的回合！");
+            return;
+        }
+        if(player.getDiscoverNum() >= 0){
+            Msg.warn(client,"当前状态无法发现卡牌！");
+            return;
+        }
+
+        try {
+            int indexI = Integer.parseInt(msg);
+            player.setDiscoverNum(indexI);
+            player.getDiscoverThread().run();
+            info.startEffect();
+            info.pushInfo();
+        }catch (Exception e){
+            Msg.warn(client,"输入discover <序号>以发现一张卡牌");
+        }
+    }
 
     public void skill(Session client, String msg) {
         // region 获取游戏对象

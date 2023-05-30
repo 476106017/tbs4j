@@ -99,7 +99,7 @@ public abstract class FollowCard extends GameObj {
         info.msg(getNameWithOwner()+"获得了【"+k+"】");
         getKeywords().add(k);
         try {
-            Thread.sleep(500);
+            Thread.sleep(200);
             info.pushInfo();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -111,7 +111,7 @@ public abstract class FollowCard extends GameObj {
             getKeywords().add(k);
         }
         try {
-            Thread.sleep(500);
+            Thread.sleep(200);
             info.pushInfo();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -139,11 +139,9 @@ public abstract class FollowCard extends GameObj {
             .findFirst()
             .ifPresent(s -> {
                 _return.set(true);
-                getKeywords().remove(s);
-                if(hasKeyword(s))
-                    info.msg(getNameWithOwner()+"失去了1层【"+ k +"】");
-                else
-                    info.msg(getNameWithOwner()+"失去了【"+ k +"】");
+                final long i = getKeywords().stream().filter(p -> p.equals(s)).count();
+                info.msg(getNameWithOwner()+"失去了"+i+"层【"+ k +"】");
+                getKeywords().removeIf(p->p.equals(s));
             });
         return _return.get();
     }
@@ -157,7 +155,7 @@ public abstract class FollowCard extends GameObj {
             }
             info.msg(getNameWithOwner()+"失去了"+min+"层【"+ k +"】");
             try {
-                Thread.sleep(500);
+                Thread.sleep(200);
                 info.pushInfo();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -217,7 +215,7 @@ public abstract class FollowCard extends GameObj {
         getInfo().getTurn().removeObject(this);
 
         try {
-            Thread.sleep(500);
+            Thread.sleep(200);
             info.pushInfo();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -239,7 +237,7 @@ public abstract class FollowCard extends GameObj {
             setHp(1);
             ownerPlayer().summon(this);
             try {
-                Thread.sleep(500);
+                Thread.sleep(200);
                 info.pushInfo();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -264,7 +262,7 @@ public abstract class FollowCard extends GameObj {
         }
     }
     public int purifyNegative(){
-        int i = removeKeywords(List.of("眩晕", "灼伤", "离神", "混乱"));
+        int i = removeKeywords(List.of("眩晕", "灼伤", "离神", "混乱","无法回复","法力流失"));
         if(getTempSpeed()<0){
             i ++;
             addSpeed(-getTempSpeed());
@@ -299,7 +297,7 @@ public abstract class FollowCard extends GameObj {
         setHp(finalHp);
         setMaxHp(finalMaxHp);
         try {
-            Thread.sleep(500);
+            Thread.sleep(200);
             info.pushInfo();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

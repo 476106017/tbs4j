@@ -57,7 +57,7 @@ public class 三月七 extends FollowCard {
                 Damage damage = (Damage) dmg;
                 if(damage.getFrom() instanceof FollowCard followCard && getBaseFollow().getCount("反击次数")>0){
                     try {
-                        Thread.sleep(500);
+                        Thread.sleep(200);
                         info.pushInfo();
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);

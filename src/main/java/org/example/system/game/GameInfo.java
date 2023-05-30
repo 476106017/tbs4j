@@ -61,7 +61,7 @@ public class GameInfo implements Serializable {
     public void resetGame(){
         msg("游戏重启！");
         try {
-            Thread.sleep(500);
+            Thread.sleep(200);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -245,6 +245,7 @@ public class GameInfo implements Serializable {
         if(getTurnObject() instanceof FollowCard followCard){
             followCard.removeKeyword("混乱");
             followCard.removeKeyword("离神");
+            followCard.removeKeyword("法力流失");
 
             if(followCard.hasKeyword("混乱")){
                 if(Math.random()<0.3333){
@@ -269,7 +270,7 @@ public class GameInfo implements Serializable {
             msg(turnObject.getNameWithOwner()+"触发了效果！");
             countCard.getExec().accept(countCard.getTarget());
             try {
-                Thread.sleep(500);
+                Thread.sleep(200);
                 pushInfo();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -289,8 +290,12 @@ public class GameInfo implements Serializable {
     }
 
     public void endTurn(){
+        if(thisPlayer().getDiscoverNum() == -1){
+            thisPlayer().getDiscoverThread().run();// 就用run，不要异步
+            thisPlayer().setDiscoverNum(0);
+        }
         getTurnObject().endTurn();
-        msg(thisPlayer().getName()+"的回合结束");
+        msg(turnObject.getNameWithOwner()+"的回合结束");
 
         if(getTurnObject() instanceof FollowCard followCard){
 
@@ -300,8 +305,9 @@ public class GameInfo implements Serializable {
             }
 
             // 发动回合结束效果
-            if(!followCard.atArea())return;
-            followCard.useEffects(EffectTiming.EndTurn);
+            if(followCard.atArea()){
+                followCard.useEffects(EffectTiming.EndTurn);
+            }
         }else if(getTurnObject() instanceof CountCard countCard){
             getTurn().removeObject(countCard);
         }
@@ -316,7 +322,8 @@ public class GameInfo implements Serializable {
         enemyLeader.expireEffect();
 
         // 是否有追加回合
-        if(moreTurn>0){
+        if(getTurnObject() instanceof FollowCard  followCard && followCard.atArea()
+            && moreTurn>0){
             moreTurn--;
             msg("回合继续！");
         }else {
@@ -350,7 +357,11 @@ public class GameInfo implements Serializable {
             followCard.getSkills().forEach(skill -> {
                 final int charge = skill.getCharge();
                 if(charge < 100){
-                    skill.setCharge(Math.min(100,charge + skill.getChargeSpeed()));
+                    if(skill.getChargeSpeed()<100 && followCard.hasKeyword("法力流失")){
+                        msg(skill.getBaseFollow().getNameWithOwner() + "遭遇了法力流失！");
+                    }else {
+                        skill.setCharge(Math.min(100,charge + skill.getChargeSpeed()));
+                    }
                 }
             });
         }

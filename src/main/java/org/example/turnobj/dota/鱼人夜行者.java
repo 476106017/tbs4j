@@ -2,13 +2,14 @@ package org.example.turnobj.dota;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.example.constant.EffectTiming;
+import org.example.system.game.Damage;
+import org.example.system.game.Effect;
 import org.example.system.game.Play;
 import org.example.system.util.Lists;
-import org.example.turnobj.FollowCard;
-import org.example.turnobj.GameObj;
-import org.example.turnobj.Skill;
-import org.example.turnobj.CountCard;
+import org.example.turnobj.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -61,7 +62,7 @@ public class 鱼人夜行者 extends FollowCard {
         private List<String> race = Lists.ofStr();
         private String mark = """
         攻击目标, 偷取目标速度、攻击力、护甲、魔抗、生命值上限各2点，转换为10点速度。
-        任务：偷取30点速度以获得【吸血】
+        任务：偷取30点速度以选择一个升级
         """;
         private String subMark = "";
 
@@ -78,8 +79,31 @@ public class 鱼人夜行者 extends FollowCard {
                     enemyFollow.addMaxHp(-2);
                     getBaseFollow().addSpeed(10);
                     count(10);
-                    if(getCount()>=30){
-                        getBaseFollow().addKeyword("吸血");
+                    if(getCount()==30){
+                        List<SkillUpgrade> upgrades = new ArrayList<>();
+                        upgrades.add(createUpgrade("撒旦之邪力","获得【吸血】",()->{
+                            getBaseFollow().addKeyword("吸血");
+                        }));
+                        upgrades.add(createUpgrade("碎颅锤",
+                            "获得【攻击时有25%几率暴击并使对手获得离神】",()->{
+                            getBaseFollow().addEffects(new Effect(this,this, EffectTiming.WhenAttack,
+                                dmg->{
+                                    if(Math.random()>0.25)return;
+                                    getInfo().msg("致命一击！");
+
+                                    Damage damage = (Damage) dmg;
+                                    int damageInt = damage.getDamage();
+                                    damage.setDamage(damageInt * 2);
+
+                                    damage.getTo().addKeyword("离神");
+                                }));
+                        }));
+                        upgrades.add(createUpgrade("蝴蝶",
+                            "获得25点攻击和30点速度",()->{
+                                getBaseFollow().addAtk(25);
+                                getBaseFollow().addSpeed(30);
+                            }));
+                        ownerPlayer().discoverCard(upgrades);
                     }
                 }));
         }

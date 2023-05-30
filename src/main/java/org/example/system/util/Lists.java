@@ -3,6 +3,7 @@ package org.example.system.util;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,5 +30,8 @@ public class Lists {
         Collections.shuffle(copy);
         return copy.subList(0, num);
 
+    }
+    public static  <T> List<T> of(T... ts){
+        return Arrays.stream(ts).toList();
     }
 }

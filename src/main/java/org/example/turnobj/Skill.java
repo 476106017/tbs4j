@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.constant.EffectTiming;
 import org.example.system.game.Play;
+import org.example.system.util.FunctionN;
 
 import java.util.List;
 
@@ -79,12 +80,14 @@ public abstract class Skill extends GameObj {
 
 
         try {
-            Thread.sleep(500);
+            Thread.sleep(200);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        info.endTurnOfCommand();
-
+        if(ownerPlayer().getDiscoverNum() != -1){
+            // 不在发现进程则结束回合
+            info.endTurnOfCommand();
+        }
     }
 
 
@@ -96,5 +99,17 @@ public abstract class Skill extends GameObj {
     @Override
     public void addTempSpeed(int speed) {
         getBaseFollow().addTempSpeed(speed);
+    }
+
+    public SkillUpgrade createUpgrade(String name, String mark, FunctionN func){
+        final SkillUpgrade skillUpgrade = new SkillUpgrade();
+        skillUpgrade.setInfo(info);
+        skillUpgrade.setBaseSkill(this);
+        skillUpgrade.setName(name);
+        skillUpgrade.setMark(mark);
+        skillUpgrade.setFunc(func);
+        return skillUpgrade;
+
+
     }
 }

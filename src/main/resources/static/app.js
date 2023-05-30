@@ -15,10 +15,10 @@ var cardHtml = function(card){
             style="background-color: ${card.color}">
             <img src="https://c-1316363893.cos.ap-nanjing.myqcloud.com/${encodeURIComponent(card.name)}.png" alt="" class="image" onerror="this.hidden='hidden'">
             <div class="name">${card.name}</div>
-            ${card.race.length>0?'<p class="race">'+card.race.join(' ')+'</p>':""}
+            ${(card.race&&card.race.length>0)?'<p class="race">'+card.race.join(' ')+'</p>':""}
             <div class="description" title="${dictShow(card.counter)}">
-                
-                <p ${card.TYPE=="FOLLOW" || card.charge==100 ?"hidden":""}>
+
+                <p ${(!card.chargeSpeed || card.charge>=100) ?"hidden":""}>
                     （充能中：${card.charge}/100）
                 </p>
                 <p>${card.keywords?'<b class="keyword">'+distinctArr(card.keywords).join(' ')+'</b>\n':""}
@@ -254,6 +254,20 @@ if ($.trim(userName)) {
                 break;
             case "clearBoard":
                 clearBoard();
+                break;
+            case "discover":
+                $('#discover-card-modal').modal('show');
+                $('#discover-card').html("");
+                obj.forEach(card => {
+                    $('#discover-card').append(cardHtml(card));
+                });
+                $("#discover-card .card").each((k,card)=>{
+                    $(card).unbind().click(()=>{
+                        $('#discover-card-modal').modal('hide');
+                        setTimeout("websocket.send('discover::"+(k+1)+"')",500);
+                        $('#discover-card').html("");
+                    });
+                })
                 break;
             case "skill":
                 $(".end-button").html("技能<br/>目标");

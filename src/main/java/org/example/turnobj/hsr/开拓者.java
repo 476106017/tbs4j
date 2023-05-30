@@ -97,8 +97,7 @@ public class 开拓者 extends FollowCard {
             setChargeSpeed(35);
             setPlay(new Play(
                 () -> enemyPlayer().getArea(), true,
-                obj->{
-                    final FollowCard enemyFollow = (FollowCard) obj;
+                enemyFollow->{
                     final List<FollowCard> enemyArea = enemyPlayer().getArea();
                     final int index = enemyArea.indexOf(enemyFollow);
                     FollowCard targetL = index==0 ? null:enemyArea.get(index-1);
@@ -108,7 +107,7 @@ public class 开拓者 extends FollowCard {
 
                     final int dmg = (int) (getBaseFollow().getAtk() * 0.7);
 
-                    info.damageMulti(getBaseFollow(), List.of(targetL,targetR),dmg);
+                    info.damageMulti(getBaseFollow(), Lists.of(targetL,targetR),dmg);
                 }));
         }
     }
